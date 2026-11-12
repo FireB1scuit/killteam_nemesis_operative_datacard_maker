@@ -70,7 +70,7 @@ export function CardPair(props: CardPairProps) {
     const scale1 = fitCardBody(card1);
     const scale2 = fitCardBody(card2);
     onLayout?.({ movedBlocks: total - keep, scale1, scale2 });
-  });
+  }, [keep, layoutKey, total, onLayout, fontsTick]);
 
   // Re-run the flow from scratch when fonts load (metrics change).
   useLayoutEffect(() => {

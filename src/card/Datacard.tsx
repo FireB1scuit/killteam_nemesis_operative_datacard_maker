@@ -29,11 +29,11 @@ export const Datacard = forwardRef<HTMLDivElement, CardProps & { traitBlocks: Ru
       <div className="kt-body" data-fit="body">
         <table className="weapons">
           <thead>
-            <tr><th aria-label="Type" /><th>Name</th><th className="c">Atk</th><th className="c">Hit</th><th className="c">Dmg</th><th>WR</th></tr>
+            <tr><th className="ico" aria-label="Type" /><th className="n">Name</th><th className="c">Atk</th><th className="c">Hit</th><th className="c">Dmg</th><th className="wr">WR</th></tr>
           </thead>
           <tbody>
             {model.weapons.length === 0 && (
-              <tr className="empty"><td className="ico" /><td className="n" colSpan={5}>No weapons selected</td></tr>
+              <tr className="empty"><td className="ico" /><td className="n">No weapons selected</td><td className="c" /><td className="c" /><td className="c" /><td className="wr" /></tr>
             )}
             {model.weapons.map((w) => (
               <tr key={w.key}>

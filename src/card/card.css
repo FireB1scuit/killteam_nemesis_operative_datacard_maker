@@ -102,10 +102,10 @@
 .kt-card table.weapons td { padding: calc(6px * var(--fs)) 8px; vertical-align: top; font-weight: 500; line-height: 1.2; }
 .kt-card table.weapons tbody tr:nth-child(even) td { background: var(--kt-row); }
 .kt-card table.weapons tbody tr:last-child td { border-bottom: 3px solid var(--faction); }
-.kt-card table.weapons td.ico { width: 46px; padding-right: 0; }
+.kt-card table.weapons .ico { width: 46px; padding-right: 0; }
 .kt-card table.weapons td.ico svg { width: 34px; height: 22px; fill: var(--faction); margin-top: 1px; display: block; }
-.kt-card table.weapons td.n { width: 34%; }
-.kt-card table.weapons td.c { width: 62px; }
+.kt-card table.weapons .n { width: 34%; }
+.kt-card table.weapons .c { width: 62px; }
 .kt-card table.weapons td.wr { font-size: calc(19.5px * var(--fs)); }
 .kt-card table.weapons tr.empty td { color: #888; font-style: italic; font-weight: 400; }
 .kt-card.hl .mod { color: var(--kt-orange-dark); }

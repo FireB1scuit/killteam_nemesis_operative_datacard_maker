@@ -11,6 +11,7 @@ const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), 
 export default defineConfig(({ command }) => ({
   base: process.env.VITE_BASE ?? (command === "build" ? `/${REPO}/` : "/"),
   plugins: [react()],
+  server: { watch: { ignored: ["**/reference/**", "**/docs/**"] } },
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   test: {
     environment: "jsdom",
