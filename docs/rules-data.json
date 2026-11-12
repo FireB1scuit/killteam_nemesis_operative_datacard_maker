@@ -1,0 +1,1689 @@
+{
+  "_about": "Nemesis Custom Builder rules data, transcribed from 'Kill Team - Nemesis Operatives Dossier' pp.14-20 (examples pp.24-31). Rule text is verbatim except where 'note' says otherwise. See docs/rules-reference.md for explanations.",
+  "_conventions": {
+    "dmg": "[normal, critical]",
+    "hit": "number meaning N+ (3 = 3+)",
+    "rules": "weapon rules exactly as printed; order on the card = 'Range x' first, then alphabetical",
+    "selection": "weapon selection slots used (Selection 0 / Selection 2 weapon rules, default 1)"
+  },
+  "sizes": [
+    {
+      "id": "S",
+      "name": "Small",
+      "control": 4,
+      "move": 6,
+      "save": 4,
+      "wounds": 35,
+      "weaponSelections": 2,
+      "defaultBaseMm": "50"
+    },
+    {
+      "id": "M",
+      "name": "Medium",
+      "control": 5,
+      "move": 6,
+      "save": 4,
+      "wounds": 50,
+      "weaponSelections": 2,
+      "defaultBaseMm": "80"
+    },
+    {
+      "id": "L",
+      "name": "Large",
+      "control": 6,
+      "move": 6,
+      "save": 4,
+      "wounds": 75,
+      "weaponSelections": 3,
+      "defaultBaseMm": "90"
+    }
+  ],
+  "composition": {
+    "_about": "Max other operatives alongside the nemesis, by the kill team's normal operative count (Joint Ops / Nemesis Ops mission packs; values from ktdash SPEC-NEM). Info only, not printed on the card.",
+    "normalCount": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "S": [
+      4,
+      4,
+      5,
+      5,
+      6,
+      7,
+      7,
+      8,
+      9,
+      9
+    ],
+    "M": [
+      3,
+      3,
+      4,
+      4,
+      5,
+      5,
+      6,
+      6,
+      7,
+      7
+    ],
+    "L": [
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      5
+    ]
+  },
+  "baseSizes": {
+    "_about": "Presets for the picker (not a rule). Card footer shows the number in a circle, e.g. 90; ovals as e.g. 105x70.",
+    "round": [
+      "25",
+      "28.5",
+      "32",
+      "40",
+      "50",
+      "60",
+      "80",
+      "90",
+      "100",
+      "130",
+      "160"
+    ],
+    "oval": [
+      "60x35",
+      "75x42",
+      "90x52",
+      "105x70",
+      "120x92",
+      "150x95",
+      "170x105"
+    ],
+    "warning": "Unless the killzone map is designed for them, larger bases (in particular 100mm or more) can be awkward as there may be locations where the operative cannot be placed. Close quarters killzones (e.g. Killzone: Tomb World) aren't recommended for large NEMESIS operatives."
+  },
+  "allegiances": [
+    {
+      "id": "AELDARI",
+      "keyword": "AELDARI",
+      "trait": "Arrogant Superiority",
+      "bookText": "Whenever this operative is shooting against or fighting against a ready enemy operative, if two or more fails are rolled for it, one of them can be discarded to re-roll another.",
+      "cardText": "Whenever an AELDARI NPO or friendly AELDARI NEMESIS operative is shooting against or fighting against a ready enemy operative, if two or more fails are rolled for it, one of them can be discarded to re-roll another.",
+      "flavour": "No matter which strand of their ancient species the Aeldari hail from, all possess the ingrained belief in their own superiority over the galaxy's other peoples, founded on their athletic poise and effortless skill.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    },
+    {
+      "id": "CHAOS",
+      "keyword": "CHAOS",
+      "trait": "Let the Galaxy Burn",
+      "bookText": "Whenever this operative is wholly within enemy territory, its weapons have the Balanced weapon rule.",
+      "cardText": "Whenever a CHAOS NPO or friendly CHAOS NEMESIS operative is wholly within enemy territory, its weapons have the Balanced weapon rule.",
+      "flavour": "The conquest and destruction of all that their enemies value is a hallmark of those who worship the Dark Gods of Chaos, their festering bitterness and hatred leading them to acts of utter despoilation.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    },
+    {
+      "id": "IMPERIUM",
+      "keyword": "IMPERIUM",
+      "trait": "Defenders of the Imperium",
+      "bookText": "Whenever an operative is shooting this operative, if this operative is wholly within your territory, one of its defence dice can be retained as a normal success without rolling it (in addition to a cover save, if any).",
+      "cardText": "Whenever an operative is shooting an IMPERIUM NPO or friendly IMPERIUM NEMESIS operative, if that IMPERIUM operative is wholly within its territory, one of its defence dice can be retained as a normal success without rolling it (in addition to a cover save, if any).",
+      "flavour": "Those who fight for Humanity are its shield: warriors who will not hesitate to lay down their lives in sacrifice if it means staving off Mankind's extinction for another day.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    },
+    {
+      "id": "LEAGUES_OF_VOTANN",
+      "keyword": "LEAGUES OF VOTANN",
+      "trait": "Acquisition at All Costs",
+      "note": "Card prints 'e.g. a flanks on pg 50' (pg 50 = Dossier Flanking Strike). Book table prints 'or and area'. Verbatim card text kept.",
+      "bookText": "Whenever this operative is shooting against or fighting against an enemy operative that contests an objective marker, or an area of the killzone that determines victor (e.g. flanks on pg 50), this operative's weapons have the Balanced weapon rule.",
+      "cardText": "Whenever a LEAGUES OF VOTANN NPO or friendly LEAGUES OF VOTANN NEMESIS operative is shooting against or fighting against an enemy operative that contests an objective marker, or an area of the killzone that determines victory (e.g. a flanks on pg 50), that LEAGUES OF VOTANN operative's weapons have the Balanced weapon rule.",
+      "flavour": "When a valuable prize claimed by their kindred is at stake, the Kin will leverage its seizure with all the efficient – and deadly – means at their disposal.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    },
+    {
+      "id": "NECRON",
+      "keyword": "NECRON",
+      "trait": "Living Metal",
+      "bookText": "In the Ready step of each Strategy phase, this operative regains up to D3+1 lost wounds.",
+      "cardText": "In the Ready step of each Strategy phase, each NECRON NPO and friendly NECRON NEMESIS operative regains up to D3+1 lost wounds (roll separately for each).",
+      "flavour": "The living metal of Necrons' bodies is capable of reknitting in a semi-sentient fashion. Wounds close and limbs reattach until the injured Necron shambles upright once more to take its revenge.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    },
+    {
+      "id": "ORK",
+      "keyword": "ORK",
+      "trait": "Waaagh!",
+      "applyToProfiles": {
+        "ranged": {
+          "hitWorsen": 1
+        },
+        "melee": {
+          "addRule": "Severe"
+        }
+      },
+      "bookText": "Whenever this operative is fighting, its weapons have the Balanced weapon rule. Worsen the Hit stat of this operative's ranged weapons by 1, but its melee weapons have the Severe weapon rule.",
+      "cardText": "Whenever an ORK NPO is fighting, its weapons have the Balanced weapon rule. Worsen the Hit stat of ORK NEMESIS operatives' ranged weapons by 1, but their melee weapons have the Severe weapon rule.",
+      "flavour": "The infamous war cry of the Orks is known and feared throughout the galaxy. When these violent aliens are riled up with enthusiastic brutality, even the most stalwart warriors fear the onslaught to come.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText.",
+      "note": "Card wording gives Balanced to ORK NPOs only; transcribed verbatim."
+    },
+    {
+      "id": "TAU_EMPIRE",
+      "keyword": "T'AU EMPIRE",
+      "trait": "Supporting Fire",
+      "bookText": "Whenever this operative is within 3\" of another friendly T'AU EMPIRE operative, this operative's ranged weapons have the Accurate 1 weapon rule.",
+      "cardText": "Whenever a T'AU EMPIRE NPO operative is within 3\" of another, its ranged weapons have the Accurate 1 weapon rule.\n\nWhenever a friendly T'AU EMPIRE NEMESIS operative is within 3\" of another friendly T'AU EMPIRE operative, that NEMESIS operative's ranged weapons have the Accurate 1 weapon rule.",
+      "flavour": "The burning commitment of the T'au to their creed of the Greater Good allows for effective coordination of incredibly accurate firepower.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    },
+    {
+      "id": "TYRANID",
+      "keyword": "TYRANID",
+      "trait": "Will of the Hive Mind",
+      "bookText": "Ignore changes to this operative's stats from being injured (including its weapons' stats).",
+      "cardText": "Ignore the changes to TYRANID NPO and friendly TYRANID NEMESIS operatives' stats from being injured (including their weapons' stats).",
+      "flavour": "The gestalt consciousness of the Hive Mind links the Tyranids, overriding their instincts and driving them onwards to fulfil its alien imperatives.",
+      "textSource": "cardText = official allegiance card (reference/Nemesis cards2-3); bookText = Dossier p.19 table (friendly-only wording). Print cardText."
+    }
+  ],
+  "traits": [
+    {
+      "id": "ARMOURED",
+      "name": "Armoured",
+      "text": "Whenever an operative is shooting this operative with a weapon that has a Normal Dmg stat of 3 or less, improve this operative's Save stat by 1.",
+      "flavour": "With a tough hide of dense carapace or artificial plating, this operative can stride through hailstorms of the enemy's increasingly desperate small arms fire."
+    },
+    {
+      "id": "BLITZ",
+      "name": "Blitz",
+      "text": "Whenever this operative performs the Charge action during its activation, its melee weapons have the Severe and Shock weapon rules until the end of that activation.",
+      "flavour": null,
+      "note": "Flavour text not available (card not in the provided scans). Rule text from Dossier p.19."
+    },
+    {
+      "id": "DUELLIST",
+      "name": "Duellist",
+      "text": "Whenever this operative is fighting or retaliating, you can resolve one of its successes before the normal order. If you do, that success must be used to block.",
+      "flavour": null,
+      "note": "Flavour text not available (card not in the provided scans). Rule text from Dossier p.19."
+    },
+    {
+      "id": "FOCUSED_TARGETING",
+      "name": "Focused Targeting",
+      "text": "Whenever this operative is shooting during its activation, if it hasn't performed any other actions during that activation, its ranged weapons have the Punishing weapon rule.",
+      "flavour": "A single-minded purpose suffuses this operative, with those it settles its attention upon suffering the full wrath of its destructive power."
+    },
+    {
+      "id": "CLOSE_RANGE_LETHALITY",
+      "name": "Close-range Lethality",
+      "text": "Whenever this operative is shooting the closest valid target within 8\" of it, its ranged weapons have the Lethal 5+ weapon rule; if the weapon already has that weapon rule, it also has the Severe weapon rule.",
+      "flavour": null,
+      "note": "Flavour text not available (card not in the provided scans). Rule text from Dossier p.19."
+    },
+    {
+      "id": "FURY",
+      "name": "Fury",
+      "text": "This operative's melee weapons have the Ceaseless weapon rule; if the weapon already has that weapon rule, it has the Relentless weapon rule. Worsen the Hit stat of this operative's ranged weapons by 1.",
+      "applyToProfiles": {
+        "ranged": {
+          "hitWorsen": 1
+        },
+        "melee": {
+          "addRule": "Ceaseless",
+          "ifHasRuleReplaceWith": "Relentless"
+        }
+      },
+      "flavour": "Unbridled wrath consumes some powerful operatives: a blinkered anger that can only be briefly sated in destruction at close quarters."
+    },
+    {
+      "id": "IMPLACABLE",
+      "name": "Implacable",
+      "text": "Ignore any changes to this operative's weapon stats from being injured.",
+      "flavour": "Unyielding and without mercy while there are enemies yet to kill, this operative pours its remaining strength into the foe's elimination, even when gravely impaired."
+    },
+    {
+      "id": "CRUSHING_IMPACT",
+      "name": "Crushing Impact",
+      "text": "When this operative finishes moving during the Charge action, inflict D3+3 damage on one enemy operative within its control range.",
+      "flavour": "Thundering headlong into the fray, this combatant uses both the impetus of their charge and their armoured bulk to bring swift death to their foes."
+    },
+    {
+      "id": "SHIELDED",
+      "name": "Shielded",
+      "text": "Once per battle, when an attack dice inflicts damage on this operative, you can ignore that inflicted damage.",
+      "flavour": "With an ablative outer skin, redundancy mechanisms or the ability to call upon esoteric protection, this operative can shrug off what should be a devastating blow."
+    },
+    {
+      "id": "SHROUDED",
+      "name": "Shrouded",
+      "text": "Whenever an operative is shooting this operative from more than 8\" away, attack dice cannot be re-rolled.",
+      "flavour": "Whether a creature capable of disguise or concealment, or a vehicle that carries disruptive technology, this operative is able to evade the enemy's attention despite its size."
+    },
+    {
+      "id": "TENACIOUS",
+      "name": "Tenacious",
+      "text": "Ignore any changes to this operative's Move stat from being injured.",
+      "flavour": "There are those creatures and mechanisms that simply will not stop. Some draw upon spiritual strength or wells of hatred, while others are driven by a fearsome will."
+    },
+    {
+      "id": "TOUGH",
+      "name": "Tough",
+      "text": "Whenever an attack dice inflicts damage of 4 or more on this operative, roll one D6: on a 5+, subtract 1 from that inflicted damage.",
+      "flavour": "Some operatives are exceptionally hardy, capable of enduring even in the face of horrific wounds. Such a trait may be due to thickened endoskeletons, reinforced subsystems or even supernatural warding."
+    },
+    {
+      "id": "VIOLENT_DEMISE",
+      "name": "Violent Demise",
+      "text": "If this operative is incapacitated, before it's removed from the killzone, inflict D6+1 damage on each other operative within 3\" of it (excluding operatives with Heavy terrain wholly intervening between them and this operative).",
+      "flavour": "From detonating ammunition stores to corrosive innards and frenzied death throes, some large targets are dangerous even in defeat."
+    }
+  ],
+  "behaviours": [
+    {
+      "id": "BRAWLER",
+      "name": "Brawler",
+      "text": "This NPO will move towards the enemy to fight them, but will seek cover on its way. When activated, if it's a NEMESIS NPO or will perform the Fight or Charge action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+      "priority": [
+        "**Fight.**",
+        "**Charge** the closest player operative via the shortest possible route.",
+        "**Reposition** towards the closest player operative, to cover if possible (a subsequent **Dash** action can fulfil this).",
+        "**Dash** towards the closest player operative, to cover if possible."
+      ],
+      "flavour": "Eager for close-quarters brutality at all costs, these inveterate fighters pile towards their enemies in surges of bloodlust."
+    },
+    {
+      "id": "BATTLER",
+      "name": "Battler",
+      "text": "This NPO will move towards the enemy to fight them, but will seek cover on its way, and will shoot if the need arises. When activated, if it's a NEMESIS NPO or will perform the Fight, Charge or Shoot action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+      "priority": [
+        "**Fight.**",
+        "**Charge** the closest player operative via the shortest possible route.",
+        "**Reposition** towards the closest player operative, to cover if possible (a subsequent **Dash** action can fulfil this).",
+        "**Shoot.**",
+        "**Dash** towards the closest player operative, to cover if possible."
+      ],
+      "flavour": "Tactically flexible and as capable of firing on the move as piling in with blades drawn, these all-round warriors are as deadly at range as they are face to face."
+    },
+    {
+      "id": "GUARDIAN",
+      "name": "Guardian",
+      "text": "This NPO will shoot the enemy as a priority, but will fight if the need arises. When activated, if it's a NEMESIS NPO or will perform the Fight, Charge or Shoot action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+      "priority": [
+        "**Fight.**",
+        "**Shoot.**",
+        "**Charge** the closest player operative that's within 4\" of it via the shortest possible route.",
+        "**Reposition.** If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission (a subsequent **Dash** action can fulfil these).",
+        "**Dash.** If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission."
+      ],
+      "flavour": "Stoic and dependable sentinels are relied upon to hold vital routes against all comers."
+    },
+    {
+      "id": "MARKSMAN",
+      "name": "Marksman",
+      "text": "This NPO will move to an ideal position to shoot the enemy. When activated, if it's a NEMESIS NPO or will perform the Shoot action during that activation, give it an Engage order. Otherwise, give it a Conceal order.",
+      "priority": [
+        "**Fall Back.** If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission.",
+        "**Shoot.**",
+        "**Reposition.** If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission (a subsequent **Dash** action can fulfil these).",
+        "**Dash.** If possible, to a location where there's a valid target that isn't obscured, if not, to a location that's appropriate for the NPOs to better win the mission."
+      ],
+      "flavour": "These warriors prefer the patient, long-distance kill."
+    }
+  ],
+  "behaviourGeneral": "Whenever an NPO would perform an action, perform the first action it can do from its behaviour. If it cannot do any, it's expended.",
+  "coreRules": [
+    {
+      "id": "EXTRA_DEFENCE",
+      "name": "Extra Defence",
+      "text": "Whenever an operative is shooting this operative, collect and roll one additional defence dice, unless this operative is injured."
+    },
+    {
+      "id": "BULKY",
+      "name": "Bulky",
+      "bullets": [
+        "This operative cannot be placed on Vantage terrain higher than 2\" from the killzone floor.",
+        "Whenever this operative would perform the Fight action, the distance requirements of its control range can be changed to 1\" horizontally and 4\" vertically until the end of that action.",
+        "This operative can move through other operatives (excluding NEMESIS operatives).",
+        "Ignore all changes to this operative's APL and if it's a player operative, APL changes don't affect the 5AP you can spend per turning point."
+      ]
+    },
+    {
+      "id": "TOWERING_SIZE",
+      "name": "Towering Size",
+      "bullets": [
+        "In the Firefight phase, whenever you determine this operative's order, you cannot select Conceal.",
+        "This operative cannot be in cover or obscured by Light terrain, terrain parts less than 3\" tall or terrain that's not wholly intervening.",
+        "Whenever another operative is performing the Shoot action, being within control range of other operatives doesn't prevent this operative from being selected as a valid target. In other words, this operative can be shot while within control range of friendly operatives.",
+        "This operative can move through terrain parts less than 2\" tall. It cannot move through Accessible terrain (excluding hatchways) unless that terrain is also less than 2\" tall.",
+        "Whenever this operative would finish a move in a terrain feature less than 2\" tall, temporarily remove that terrain feature from the killzone, then return it when this operative leaves that location; if it's an equipment terrain feature, remove it from the battle instead."
+      ]
+    }
+  ],
+  "controlStat": "Control is a new stat for NEMESIS operatives that's used for the APL stat in all instances except spending action points. For example, use it for determining control of markers, and for rules that compare a dice result to the operative's APL stat.",
+  "activation": "NEMESIS operatives can activate twice per turning point, but activation restrictions and action point limits vary depending on if it's an NPO or player operative. This is detailed in the mission pack you are playing.",
+  "missionActions": "NEMESIS operatives can perform the Operate Hatch and Breach mission actions, and NEMESIS NPOs will do so where necessary to fulfil their behaviour.",
+  "playerOperative": "If the operative is a player operative, you can choose its order and actions (other than Operate Hatch and Breach, it cannot perform mission actions or unique actions from equipment). When a NEMESIS is a player operative, it doesn't gain a faction keyword.",
+  "playerActivationLimits": "Activate your friendly NEMESIS operative twice per turning point, but not a second time until all other friendly operatives are expended. It cannot move more than 12\" per turning point and you cannot spend more than 5AP for it in total per turning point. (Joint Ops / Nemesis Ops mission packs.)",
+  "npoActivationLimits": "A NEMESIS NPO is activated by NPO activation cards, which set its APL (2 or 3) for that activation. It cannot activate more than twice per turning point, and it cannot move more than 12\" per turning point. (Joint Ops mission pack.)",
+  "weapons": [
+    {
+      "id": "autocannon",
+      "name": "Autocannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Deathspitter",
+        "Missile pod"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": []
+        }
+      ]
+    },
+    {
+      "id": "burst_cannon",
+      "name": "Burst cannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Scatter laser",
+        "Devourer"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            3,
+            4
+          ],
+          "rules": [
+            "Ceaseless",
+            "Torrent 1\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cyclic_ion_raker",
+      "name": "Cyclic ion raker",
+      "type": "ranged",
+      "selection": 2,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Heavy (Reposition only)",
+            "Piercing 1",
+            "Selection 2",
+            "Torrent 2\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flamestorm_cannon",
+      "name": "Flamestorm cannon",
+      "type": "ranged",
+      "selection": 2,
+      "alternatives": [
+        "Flamespurt"
+      ],
+      "profiles": [
+        {
+          "atk": 6,
+          "hit": 2,
+          "dmg": [
+            3,
+            3
+          ],
+          "rules": [
+            "Range 8\"",
+            "Heavy (Reposition only)",
+            "Selection 2",
+            "Torrent 2\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "havoc_launcher",
+      "name": "Havoc launcher",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Grotzooka",
+        "Spore mine launcher"
+      ],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            4,
+            6
+          ],
+          "rules": [
+            "Blast 2\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_bolter",
+      "name": "Heavy bolter",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Piercing Crits 1",
+            "Torrent 1\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_flamer",
+      "name": "Heavy flamer",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Incendine combustor",
+        "Liquifier gun",
+        "Skorcha"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 2,
+          "dmg": [
+            3,
+            3
+          ],
+          "rules": [
+            "Range 8\"",
+            "Saturate",
+            "Torrent 2\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_onslaught_gatling_cannon",
+      "name": "Heavy onslaught gatling cannon",
+      "type": "ranged",
+      "selection": 2,
+      "alternatives": [
+        "Avenger chaincannon",
+        "Enmitic exterminator"
+      ],
+      "profiles": [
+        {
+          "atk": 6,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Heavy (Reposition only)",
+            "Selection 2",
+            "Torrent 2\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_phosphor_blaster",
+      "name": "Heavy phosphor blaster",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Saturate",
+            "Severe"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_rail_rifle",
+      "name": "Heavy rail rifle",
+      "type": "ranged",
+      "selection": 2,
+      "alternatives": [
+        "Doomsday blaster",
+        "Gauss destructor"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            6,
+            7
+          ],
+          "rules": [
+            "Heavy (Reposition only)",
+            "Piercing 2",
+            "Selection 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heavy_stubber",
+      "name": "Heavy stubber",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Big shoota"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Torrent 1\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lascannon",
+      "name": "Lascannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Bright lance",
+        "Dark lance"
+      ],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            6,
+            7
+          ],
+          "rules": [
+            "Heavy (Reposition only)",
+            "Piercing 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "macro_plasma_incinerator",
+      "name": "Macro plasma incinerator",
+      "type": "ranged",
+      "selection": 2,
+      "alternatives": [],
+      "profiles": [
+        {
+          "suffix": "standard",
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            6
+          ],
+          "rules": [
+            "Blast 2\"",
+            "Heavy (Reposition only)",
+            "Piercing 1",
+            "Selection 2"
+          ]
+        },
+        {
+          "suffix": "supercharge",
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": [
+            "Blast 2\"",
+            "Heavy (Reposition only)",
+            "Lethal 5+",
+            "Piercing 1",
+            "Selection 2"
+          ]
+        }
+      ],
+      "note": "Supercharge profile has no Hot in the book (unlike the plasma cannon). Transcribed as printed."
+    },
+    {
+      "id": "meltagun",
+      "name": "Meltagun",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Fusion blaster",
+        "Heat lance"
+      ],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            6,
+            3
+          ],
+          "rules": [
+            "Range 6\"",
+            "Devastating 4",
+            "Piercing 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "missile_launcher",
+      "name": "Missile launcher",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "suffix": "frag",
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            3,
+            5
+          ],
+          "rules": [
+            "Blast 2\""
+          ]
+        },
+        {
+          "suffix": "krak",
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            7
+          ],
+          "rules": [
+            "Piercing 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multi_melta",
+      "name": "Multi-melta",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            6,
+            3
+          ],
+          "rules": [
+            "Devastating 4",
+            "Heavy (Reposition only)",
+            "Piercing 2"
+          ]
+        }
+      ],
+      "note": "Book misprints the name as 'Muti-melta'."
+    },
+    {
+      "id": "plasma_cannon",
+      "name": "Plasma cannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "suffix": "standard",
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            4,
+            6
+          ],
+          "rules": [
+            "Blast 2\"",
+            "Heavy (Reposition only)",
+            "Piercing 1"
+          ]
+        },
+        {
+          "suffix": "supercharge",
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": [
+            "Blast 2\"",
+            "Heavy (Reposition only)",
+            "Hot",
+            "Lethal 5+",
+            "Piercing 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plasma_gun",
+      "name": "Plasma gun",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "suffix": "standard",
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            4,
+            6
+          ],
+          "rules": [
+            "Piercing 1"
+          ]
+        },
+        {
+          "suffix": "supercharge",
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": [
+            "Hot",
+            "Lethal 5+",
+            "Piercing 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rokkit_launcha",
+      "name": "Rokkit launcha",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 6,
+          "hit": 4,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Blast 1\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shuriken_cannon",
+      "name": "Shuriken cannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Rending",
+            "Torrent 1\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "splinter_cannon",
+      "name": "Splinter cannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            3,
+            5
+          ],
+          "rules": [
+            "Lethal 5+",
+            "Torrent 1\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "starcannon",
+      "name": "Starcannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [
+        "Heavy venom cannon",
+        "Kustom mega-blasta"
+      ],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": [
+            "Lethal 5+",
+            "Piercing 1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stranglethorn_cannon",
+      "name": "Stranglethorn cannon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            3,
+            5
+          ],
+          "rules": [
+            "Blast 2\"",
+            "Lethal 5+"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thermal_spear",
+      "name": "Thermal spear",
+      "type": "ranged",
+      "selection": 2,
+      "alternatives": [
+        "Fusion collider"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            6,
+            3
+          ],
+          "rules": [
+            "Devastating 4",
+            "Heavy (Reposition only)",
+            "Piercing 2",
+            "Selection 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "twinned",
+      "name": "Twinned weapon",
+      "type": "ranged",
+      "selection": 1,
+      "alternatives": [],
+      "modifier": true,
+      "text": "Twinned: Select one other ranged weapon this operative has to have the Ceaseless weapon rule; if it's a burst cannon, add 1 to its Atk stat instead.",
+      "apply": {
+        "targetType": "ranged",
+        "addRule": "Ceaseless",
+        "special": {
+          "burst_cannon": {
+            "atk": 1
+          }
+        },
+        "labelPrefix": "Twinned"
+      }
+    },
+    {
+      "id": "chain_weapon",
+      "name": "Chain weapon",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": [
+            "Brutal",
+            "Rending"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "close_combat_weapon",
+      "name": "Close combat weapon",
+      "type": "melee",
+      "selection": 0,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 3,
+          "hit": 4,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Selection 0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dread_saw",
+      "name": "Dread saw",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Rending"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fleshmower",
+      "name": "Fleshmower",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 2,
+          "dmg": [
+            4,
+            5
+          ],
+          "rules": [
+            "Brutal"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "power_fist",
+      "name": "Power fist",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [
+        "Crushing claw"
+      ],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            6,
+            8
+          ],
+          "rules": [
+            "Brutal",
+            "Shock"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "power_scourge",
+      "name": "Power scourge",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [
+        "Lasher tendrils"
+      ],
+      "profiles": [
+        {
+          "atk": 6,
+          "hit": 3,
+          "dmg": [
+            3,
+            5
+          ],
+          "rules": [
+            "Lethal 5+"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "power_talon",
+      "name": "Power talon",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            6
+          ],
+          "rules": [
+            "Lethal 5+",
+            "Rending"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "power_weapon",
+      "name": "Power weapon",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [
+        "Ghostglaive"
+      ],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            5,
+            7
+          ],
+          "rules": [
+            "Lethal 5+"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "scything_talons",
+      "name": "Scything talons",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [
+        "Macro-scalpels"
+      ],
+      "profiles": [
+        {
+          "atk": 5,
+          "hit": 3,
+          "dmg": [
+            4,
+            6
+          ],
+          "rules": [
+            "Ceaseless"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thunder_hammer",
+      "name": "Thunder hammer",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [],
+      "profiles": [
+        {
+          "atk": 4,
+          "hit": 3,
+          "dmg": [
+            6,
+            8
+          ],
+          "rules": [
+            "Shock",
+            "Stun"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "paired",
+      "name": "Paired weapon",
+      "type": "melee",
+      "selection": 1,
+      "alternatives": [],
+      "modifier": true,
+      "text": "Paired: Select one other melee weapon this operative has and add 1 to its Atk stat.",
+      "apply": {
+        "targetType": "melee",
+        "atk": 1,
+        "labelPrefix": "Paired"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "_page": "Dossier pp.24-25",
+      "name": "Armoured Sentinel",
+      "moniker": "Armourbane",
+      "nameKeyword": "ARMOURED SENTINEL",
+      "operativeType": "npo",
+      "allegiance": "IMPERIUM",
+      "size": "M",
+      "base": "80",
+      "behaviour": "MARKSMAN",
+      "weapons": [
+        {
+          "weaponId": "plasma_cannon"
+        },
+        {
+          "weaponId": "close_combat_weapon"
+        }
+      ],
+      "traits": [
+        "ARMOURED",
+        "FOCUSED_TARGETING"
+      ],
+      "expected": {
+        "stats": {
+          "control": 5,
+          "move": "6\"",
+          "save": "4+",
+          "wounds": 50
+        },
+        "selectionsUsed": 1,
+        "traitsAllowed": 2,
+        "rows": [
+          {
+            "name": "Plasma cannon (standard)",
+            "atk": 4,
+            "hit": "3+",
+            "dmg": "4/6",
+            "wr": "Blast 2\", Heavy (Reposition only), Piercing 1"
+          },
+          {
+            "name": "Plasma cannon (supercharge)",
+            "atk": 4,
+            "hit": "3+",
+            "dmg": "5/6",
+            "wr": "Blast 2\", Heavy (Reposition only), Hot, Lethal 5+, Piercing 1"
+          },
+          {
+            "name": "Close combat weapon",
+            "atk": 3,
+            "hit": "4+",
+            "dmg": "4/5",
+            "wr": "Selection 0"
+          }
+        ],
+        "keywords": "IMPERIUM, NEMESIS, ARMOURED SENTINEL",
+        "weaponRuleReference": [
+          "Blast x",
+          "Heavy",
+          "Hot",
+          "Lethal x+",
+          "Piercing x",
+          "Punishing",
+          "Selection x"
+        ]
+      }
+    },
+    {
+      "_page": "Dossier pp.26-27",
+      "name": "XV8 Crisis Battlesuit",
+      "moniker": "Shas'ui Nomura",
+      "nameKeyword": "XV8 CRISIS BATTLESUIT",
+      "operativeType": "npo",
+      "allegiance": "TAU_EMPIRE",
+      "size": "S",
+      "base": "50",
+      "behaviour": "MARKSMAN",
+      "weapons": [
+        {
+          "weaponId": "meltagun",
+          "alias": "Twinned meltaguns"
+        },
+        {
+          "weaponId": "twinned",
+          "targetIndex": 0
+        },
+        {
+          "weaponId": "close_combat_weapon"
+        }
+      ],
+      "traits": [
+        "SHIELDED"
+      ],
+      "expected": {
+        "stats": {
+          "control": 4,
+          "move": "6\"",
+          "save": "4+",
+          "wounds": 35
+        },
+        "selectionsUsed": 2,
+        "traitsAllowed": 1,
+        "rows": [
+          {
+            "name": "Twinned meltaguns",
+            "atk": 4,
+            "hit": "3+",
+            "dmg": "6/3",
+            "wr": "Range 6\", Ceaseless, Devastating 4, Piercing 2"
+          },
+          {
+            "name": "Close combat weapon",
+            "atk": 3,
+            "hit": "4+",
+            "dmg": "4/5",
+            "wr": "Selection 0"
+          }
+        ],
+        "keywords": "T'AU EMPIRE, NEMESIS, XV8 CRISIS BATTLESUIT",
+        "weaponRuleReference": [
+          "Accurate x",
+          "Ceaseless",
+          "Devastating x",
+          "Piercing x",
+          "Range x",
+          "Selection x"
+        ]
+      }
+    },
+    {
+      "_page": "Dossier pp.28-29",
+      "name": "Screamer-Killer",
+      "moniker": "The Deathdirge of Varl",
+      "nameKeyword": "SCREAMER-KILLER",
+      "operativeType": "npo",
+      "allegiance": "TYRANID",
+      "size": "L",
+      "base": "90",
+      "behaviour": "BATTLER",
+      "weapons": [
+        {
+          "weaponId": "plasma_cannon",
+          "alias": "Bio-plasmic scream",
+          "_bookLabel": "book prints the base name 'Plasma cannon'"
+        },
+        {
+          "weaponId": "scything_talons"
+        },
+        {
+          "weaponId": "paired",
+          "targetIndex": 1
+        }
+      ],
+      "traits": [
+        "FURY"
+      ],
+      "expected": {
+        "stats": {
+          "control": 6,
+          "move": "6\"",
+          "save": "4+",
+          "wounds": 75
+        },
+        "selectionsUsed": 3,
+        "traitsAllowed": 1,
+        "rows": [
+          {
+            "name": "Bio-plasmic scream (standard)",
+            "atk": 4,
+            "hit": "4+",
+            "dmg": "4/6",
+            "wr": "Blast 2\", Heavy (Reposition only), Piercing 1"
+          },
+          {
+            "name": "Bio-plasmic scream (supercharge)",
+            "atk": 4,
+            "hit": "4+",
+            "dmg": "5/6",
+            "wr": "Blast 2\", Heavy (Reposition only), Hot, Lethal 5+, Piercing 1"
+          },
+          {
+            "name": "Paired scything talons",
+            "atk": 6,
+            "hit": "3+",
+            "dmg": "4/6",
+            "wr": "Relentless"
+          }
+        ],
+        "keywords": "TYRANID, NEMESIS, SCREAMER-KILLER",
+        "weaponRuleReference": [
+          "Blast x",
+          "Ceaseless",
+          "Heavy",
+          "Hot",
+          "Lethal x+",
+          "Piercing x",
+          "Relentless"
+        ]
+      }
+    },
+    {
+      "_page": "Dossier pp.30-31",
+      "name": "Redemptor Dreadnought",
+      "moniker": "Venerable Carrius",
+      "nameKeyword": "REDEMPTOR DREADNOUGHT",
+      "operativeType": "npo",
+      "allegiance": "IMPERIUM",
+      "size": "L",
+      "base": "90",
+      "behaviour": "GUARDIAN",
+      "weapons": [
+        {
+          "weaponId": "heavy_onslaught_gatling_cannon"
+        },
+        {
+          "weaponId": "power_fist"
+        }
+      ],
+      "traits": [
+        "IMPLACABLE"
+      ],
+      "expected": {
+        "stats": {
+          "control": 6,
+          "move": "6\"",
+          "save": "4+",
+          "wounds": 75
+        },
+        "selectionsUsed": 3,
+        "traitsAllowed": 1,
+        "rows": [
+          {
+            "name": "Heavy onslaught gatling cannon",
+            "atk": 6,
+            "hit": "3+",
+            "dmg": "4/5",
+            "wr": "Heavy (Reposition only), Selection 2, Torrent 2\""
+          },
+          {
+            "name": "Power fist",
+            "atk": 4,
+            "hit": "3+",
+            "dmg": "6/8",
+            "wr": "Brutal, Shock"
+          }
+        ],
+        "keywords": "IMPERIUM, NEMESIS, REDEMPTOR DREADNOUGHT",
+        "weaponRuleReference": [
+          "Brutal",
+          "Heavy",
+          "Selection x",
+          "Shock",
+          "Torrent x"
+        ]
+      }
+    }
+  ],
+  "_sources": {
+    "rules": "Dossier pp.14-20",
+    "examples": "Dossier pp.24-31",
+    "officialCards": "reference/Nemesis cards1-4 (1).pdf: scans of the allegiance, nemesis trait and behaviour cards (flavour + card wording)",
+    "weaponRules": "Kill Team Lite Rules [2025-07]",
+    "cardFormat": "Kill Team 2024 Core Rules p.48 (PDF page 50)"
+  },
+  "weaponRuleGlossary": {
+    "_about": "Weapon rules reference (the 'Weapon Rules' list on the last page of the Kill Team Lite Rules [2025-07]). Optional PDF add-on printed BELOW the card(s): list every weapon rule that appears on the printed cards, in alphabetical order of 'term', with its Lite Rules text verbatim. An entry is included when any of its 'match' regexes (JavaScript, case-sensitive) matches the final printed text of card 1 or card 2: the WR column plus the ability text (traits can name weapon rules, e.g. Fury -> Ceaseless/Relentless, Focused Targeting -> Punishing). Only weapon rules are listed, no game terms. 'Selection x' is not in the Lite Rules; its Dossier wording is used and labelled with its source.",
+    "entries": [
+      {
+        "term": "Accurate x",
+        "source": "Lite Rules",
+        "text": "You can retain up to x attack dice as normal successes without rolling them. If a weapon has more than one instance of Accurate x, you can treat it as one instance of Accurate 2 instead (this takes precedence over x rules above).",
+        "match": [
+          "\\bAccurate \\d"
+        ]
+      },
+      {
+        "term": "Balanced",
+        "source": "Lite Rules",
+        "text": "You can re-roll one of your attack dice.",
+        "match": [
+          "\\bBalanced\\b"
+        ]
+      },
+      {
+        "term": "Blast x",
+        "source": "Lite Rules",
+        "text": "The target you select is the primary target. After shooting the primary target, shoot with this weapon against each secondary target in an order of your choice (roll each sequence separately). Secondary targets are other operatives visible to and within x of the primary target, e.g. Blast 2\" (they are all valid targets, regardless of a Conceal order). Secondary targets are in cover and obscured if the primary target was.",
+        "match": [
+          "\\bBlast \\d"
+        ]
+      },
+      {
+        "term": "Brutal",
+        "source": "Lite Rules",
+        "text": "Your opponent can only block with critical successes.",
+        "match": [
+          "\\bBrutal\\b"
+        ]
+      },
+      {
+        "term": "Ceaseless",
+        "source": "Lite Rules",
+        "text": "You can re-roll any of your attack dice results of one result (e.g. results of 2).",
+        "match": [
+          "\\bCeaseless\\b"
+        ]
+      },
+      {
+        "term": "Devastating x",
+        "source": "Lite Rules",
+        "text": "Each retained critical success immediately inflicts x damage on the operative this weapon is being used against, e.g. Devastating 3. If the rule starts with a distance (e.g. 1\" Devastating x), inflict x damage on that operative and each other operative visible to and within that distance of it. Note that success isn't discarded after doing so - it can still be resolved later in the sequence.",
+        "match": [
+          "\\bDevastating \\d"
+        ]
+      },
+      {
+        "term": "Heavy",
+        "source": "Lite Rules",
+        "text": "An operative cannot use this weapon in an activation or counteraction in which it moved, and it cannot move in an activation or counteraction in which it used this weapon. If the rule is Heavy (x only), where x is a move action, only that move is allowed, e.g. Heavy (Dash only). This weapon rule has no effect on preventing the Guard action.",
+        "match": [
+          "\\bHeavy \\("
+        ]
+      },
+      {
+        "term": "Hot",
+        "source": "Lite Rules",
+        "text": "After an operative uses this weapon, roll one D6: if the result is less than the weapon's Hit stat, inflict damage on that operative equal to the result multiplied by two. If it's used multiple times in one action (e.g. Blast), still only roll one D6.",
+        "match": [
+          "\\bHot\\b"
+        ]
+      },
+      {
+        "term": "Lethal x+",
+        "source": "Lite Rules",
+        "text": "Your successes equal to or greater than x are critical successes, e.g. Lethal 5+.",
+        "match": [
+          "\\bLethal \\d\\+"
+        ]
+      },
+      {
+        "term": "Limited x",
+        "source": "Lite Rules",
+        "text": "After an operative uses this weapon a number of times in the battle equal to x, they no longer have it. If it's used multiple times in one action (e.g. Blast), treat this as one use.",
+        "match": [
+          "\\bLimited \\d"
+        ]
+      },
+      {
+        "term": "Piercing x",
+        "source": "Lite Rules",
+        "text": "The defender collects x less defence dice, e.g. Piercing 1. If the rule is Piercing Crits x, this only comes into effect if you retain any critical successes.",
+        "match": [
+          "\\bPiercing (Crits )?\\d"
+        ]
+      },
+      {
+        "term": "Punishing",
+        "source": "Lite Rules",
+        "text": "If you retain any critical successes, you can retain one of your fails as a normal success instead of discarding it.",
+        "match": [
+          "\\bPunishing\\b"
+        ]
+      },
+      {
+        "term": "Range x",
+        "source": "Lite Rules",
+        "text": "Only operatives within x of the active operative can be valid targets, e.g. Range 9\".",
+        "match": [
+          "\\bRange \\d+\\\""
+        ]
+      },
+      {
+        "term": "Relentless",
+        "source": "Lite Rules",
+        "text": "You can re-roll any of your attack dice.",
+        "match": [
+          "\\bRelentless\\b"
+        ]
+      },
+      {
+        "term": "Rending",
+        "source": "Lite Rules",
+        "text": "If you retain any critical successes, you can retain one of your normal successes as a critical success instead.",
+        "match": [
+          "\\bRending\\b"
+        ]
+      },
+      {
+        "term": "Saturate",
+        "source": "Lite Rules",
+        "text": "The defender cannot retain cover saves.",
+        "match": [
+          "\\bSaturate\\b"
+        ]
+      },
+      {
+        "term": "Seek",
+        "source": "Lite Rules",
+        "text": "When selecting a valid target, operatives with a Conceal order cannot use terrain for cover. If the rule is Seek Light, they cannot use Light terrain for cover. While this can allow operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any).",
+        "match": [
+          "\\bSeek\\b"
+        ]
+      },
+      {
+        "term": "Selection x",
+        "source": "Nemesis Operatives Dossier p.16 (not in the Lite Rules)",
+        "text": "Weapons with the Selection x weapon rule count as x selections instead (e.g. a weapon with Selection 2 counts as two of your permitted selections). Any selections you don't use grant you an extra nemesis trait selection.",
+        "match": [
+          "\\bSelection \\d"
+        ]
+      },
+      {
+        "term": "Severe",
+        "source": "Lite Rules",
+        "text": "If you don't retain any critical successes, you can change one of your normal successes to a critical success. The Devastating and Piercing Crits weapon rules still take effect, but Punishing and Rending don't.",
+        "match": [
+          "\\bSevere\\b"
+        ]
+      },
+      {
+        "term": "Shock",
+        "source": "Lite Rules",
+        "text": "The first time you strike with a critical success in each sequence, also discard one of your opponent's unresolved normal successes (or one of their critical successes if there are none).",
+        "match": [
+          "\\bShock\\b"
+        ]
+      },
+      {
+        "term": "Silent",
+        "source": "Lite Rules",
+        "text": "An operative can perform the Shoot action with this weapon while it has a Conceal order.",
+        "match": [
+          "\\bSilent\\b"
+        ]
+      },
+      {
+        "term": "Stun",
+        "source": "Lite Rules",
+        "text": "If you retain any critical successes, subtract 1 from the APL stat of the operative this weapon is being used against until the end of its next activation.",
+        "match": [
+          "\\bStun\\b"
+        ]
+      },
+      {
+        "term": "Torrent x",
+        "source": "Lite Rules",
+        "text": "Select a valid target as normal as the primary target, then select any number of other valid targets within x of the first valid target, but not within control range of friendly operatives, as secondary targets, e.g. Torrent 2\". Shoot with this weapon against all of them in an order of your choice (roll each sequence separately).",
+        "match": [
+          "\\bTorrent \\d"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nemesis PDF Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Roboto+Condensed:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="card.css">
+<style>
+  /* A4 portrait at true size: 1mm = 3.7795px (96dpi). Cards are 120 x 70 mm. */
+  body { margin: 0; padding: 30px; background: #555; }
+  .page {
+    width: 210mm; height: 297mm; margin: 0 auto; background: #fff; position: relative;
+    box-shadow: 0 6px 24px rgba(0,0,0,.4); padding: 12mm 15mm; box-sizing: border-box;
+    font-family: "Roboto Condensed", sans-serif; color: #1d1d1d;
+  }
+  .slot { width: 120mm; height: 70mm; margin: 0 auto 5mm; position: relative; }
+  .slot .card { transform: scale(0.37795); transform-origin: top left; box-shadow: none; }
+  .cut { border-top: 1px dashed #999; margin: 3mm 0 4mm; position: relative; }
+  .cut span { position: absolute; left: 0; top: -2.4mm; background: #fff; padding-right: 2mm; font-size: 7pt; color: #999; }
+  .wr-head { display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 0.8mm solid #e8641c; padding-bottom: 1mm; margin-bottom: 2.5mm; }
+  .wr-head h2 { margin: 0; font: 500 13pt "Oswald", sans-serif; letter-spacing: .04em; }
+  .wr-head small { font-size: 7pt; color: #777; }
+  .wr-list { columns: 2; column-gap: 7mm; font-size: 8pt; line-height: 1.32; }
+  .wr-list p { margin: 0 0 1.8mm; break-inside: avoid; }
+  .wr-list b { font-weight: 700; }
+  .foot { position: absolute; left: 15mm; right: 15mm; bottom: 8mm; font-size: 6.5pt; color: #999; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-control" viewBox="0 0 24 24"><path d="M2 4h20L12 21z"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M3 21 15 9l-4-1 11-6-4 11-1-4L5 21z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M3 3h18v9c0 5-4 8-9 10-5-2-9-5-9-10z"/></symbol>
+  <symbol id="i-wounds" viewBox="0 0 24 24"><path d="M12 1c2 6 5 11 5 15a5 5 0 0 1-10 0c0-4 3-9 5-15z"/></symbol>
+  <symbol id="i-ranged" viewBox="0 0 34 22"><rect x="1" y="7" width="8" height="14" rx="4"/><rect x="13" y="7" width="8" height="14" rx="4"/><rect x="25" y="7" width="8" height="14" rx="4"/></symbol>
+  <symbol id="i-melee" viewBox="0 0 34 22"><path d="M1 9h21v4H1z"/><path d="M22 7h4v8h-4z"/><path d="M26 10h7v2h-7z"/></symbol>
+</svg>
+
+<div class="page">
+  <div class="slot">
+    <div class="card">
+      <header class="kt-head">
+        <div class="name"><h1>Screamer-Killer</h1><div class="moniker">‘The Deathdirge of Varl’</div></div>
+        <div class="pic placeholder"></div>
+        <div class="stats">
+          <div class="stat"><div class="k small">Control</div><div class="v"><svg><use href="#i-control"/></svg>6</div></div>
+          <div class="stat"><div class="k">Move</div><div class="v"><svg><use href="#i-move"/></svg>6"</div></div>
+          <div class="stat"><div class="k">Save</div><div class="v"><svg><use href="#i-save"/></svg>4<span class="plus">+</span></div></div>
+          <div class="stat"><div class="k">Wounds</div><div class="v"><svg><use href="#i-wounds"/></svg>75</div></div>
+        </div>
+      </header>
+      <div class="kt-body">
+        <table class="weapons">
+          <thead><tr><th></th><th>Name</th><th class="c">Atk</th><th class="c">Hit</th><th class="c">Dmg</th><th>WR</th></tr></thead>
+          <tbody>
+            <tr><td class="ico"><svg><use href="#i-ranged"/></svg></td><td class="n">Bio-plasmic scream (standard)</td><td class="c">4</td><td class="c">4+</td><td class="c">4/6</td><td class="wr">Blast 2", Heavy (Reposition only), Piercing 1</td></tr>
+            <tr><td class="ico"><svg><use href="#i-ranged"/></svg></td><td class="n">Bio-plasmic scream (supercharge)</td><td class="c">4</td><td class="c">4+</td><td class="c">5/6</td><td class="wr">Blast 2", Heavy (Reposition only), Hot, Lethal 5+, Piercing 1</td></tr>
+            <tr><td class="ico"><svg><use href="#i-melee"/></svg></td><td class="n">Paired scything talons</td><td class="c">6</td><td class="c">3+</td><td class="c">4/6</td><td class="wr">Relentless</td></tr>
+          </tbody>
+        </table>
+        <div class="abil">
+          <div class="ab">
+            <p><b>Will of the Hive Mind:</b> Ignore the changes to TYRANID NPO and friendly TYRANID NEMESIS operatives’ stats from being injured (including their weapons’ stats).</p>
+            <p><b>Fury:</b> This operative’s melee weapons have the Ceaseless weapon rule; if the weapon already has that weapon rule, it has the Relentless weapon rule. Worsen the Hit stat of this operative’s ranged weapons by 1.</p>
+          </div>
+          <div class="ab">
+            <p><b>Nemesis:</b> Extra Defence, Bulky, Towering Size <i>(see other card)</i>.</p>
+            <p><b>Control:</b> Use this operative’s CONTROL stat instead of APL in all instances except spending action points.</p>
+            <p><b>Behaviour:</b> Battler <i>(see other card)</i>.</p>
+          </div>
+        </div>
+      </div>
+      <footer class="kt-foot"><div class="kw"><span class="fk">Tyranid</span>, Nemesis, Screamer-Killer</div><div class="sz">NPO · Size: Large</div><div class="pg">1/2</div><div class="base">90</div></footer>
+    </div>
+  </div>
+
+  <div class="slot">
+    <div class="card">
+      <header class="kt-head">
+        <div class="name"><h1>Screamer-Killer</h1><div class="moniker">‘The Deathdirge of Varl’</div></div>
+        <div class="pic placeholder"></div>
+        <div class="stats">
+          <div class="stat"><div class="k small">Control</div><div class="v"><svg><use href="#i-control"/></svg>6</div></div>
+          <div class="stat"><div class="k">Move</div><div class="v"><svg><use href="#i-move"/></svg>6"</div></div>
+          <div class="stat"><div class="k">Save</div><div class="v"><svg><use href="#i-save"/></svg>4<span class="plus">+</span></div></div>
+          <div class="stat"><div class="k">Wounds</div><div class="v"><svg><use href="#i-wounds"/></svg>75</div></div>
+        </div>
+      </header>
+      <div class="kt-body" style="padding-top:14px">
+        <div class="actbar">Behaviour: Battler <span>NPO</span></div>
+        <div class="abil" style="padding-top:0; flex:0 0 auto">
+          <div class="ab">
+            <p class="eff">This NPO will move towards the enemy to fight them, but will seek cover on its way, and will shoot if the need arises. When activated, if it’s a NEMESIS NPO or will perform the <b>Fight</b>, <b>Charge</b> or <b>Shoot</b> action during that activation, give it an Engage order. Otherwise, give it a Conceal order.</p>
+            <p class="res">Performs the first action it can from this list. If it can do none, it’s expended.</p>
+          </div>
+          <ol class="prio">
+            <li><b>Fight.</b></li>
+            <li><b>Charge</b> the closest player operative via the shortest possible route.</li>
+            <li><b>Reposition</b> towards the closest player operative, to cover if possible (a subsequent <b>Dash</b> action can fulfil this).</li>
+            <li><b>Shoot.</b></li>
+            <li><b>Dash</b> towards the closest player operative, to cover if possible.</li>
+          </ol>
+        </div>
+        <div class="abil" style="border-top:3px solid var(--faction); margin-top:10px; padding-top:10px">
+          <div class="ab">
+            <p><b>Extra Defence:</b> Whenever an operative is shooting this operative, collect and roll one additional defence dice, unless this operative is injured.</p>
+            <p><b>Bulky:</b></p>
+            <ul><li>Cannot be placed on Vantage terrain higher than 2" from the killzone floor.</li><li>Fight control range can be 1" horizontally and 4" vertically.</li><li>Can move through other operatives (excluding NEMESIS). Ignore all changes to its APL.</li></ul>
+          </div>
+          <div class="ab">
+            <p><b>Towering Size:</b></p>
+            <ul><li>Cannot be given a Conceal order in the Firefight phase.</li><li>Cannot be in cover or obscured by Light terrain, terrain parts less than 3" tall, or terrain that’s not wholly intervening.</li><li>Can be shot while within control range of friendly operatives.</li><li>Moves through terrain parts less than 2" tall; terrain less than 2" tall where it finishes a move is temporarily removed.</li></ul>
+          </div>
+        </div>
+      </div>
+      <footer class="kt-foot"><div class="kw"><span class="fk">Tyranid</span>, Nemesis, Screamer-Killer</div><div class="sz">NPO · Size: Large</div><div class="pg">2/2</div><div class="base">90</div></footer>
+    </div>
+  </div>
+
+  <div class="cut"><span>✂ cut along card edges</span></div>
+
+  <div class="wr-head"><h2>WEAPON RULES</h2><small>Weapon rules used on these cards · Kill Team Lite Rules</small></div>
+  <div class="wr-list">
+    <p><b>Blast x:</b> The target you select is the primary target. After shooting the primary target, shoot with this weapon against each secondary target in an order of your choice (roll each sequence separately). Secondary targets are other operatives visible to and within x of the primary target, e.g. Blast 2" (they are all valid targets, regardless of a Conceal order). Secondary targets are in cover and obscured if the primary target was.</p>
+    <p><b>Ceaseless:</b> You can re-roll any of your attack dice results of one result (e.g. results of 2).</p>
+    <p><b>Heavy:</b> An operative cannot use this weapon in an activation or counteraction in which it moved, and it cannot move in an activation or counteraction in which it used this weapon. If the rule is Heavy (x only), where x is a move action, only that move is allowed, e.g. Heavy (Dash only). This weapon rule has no effect on preventing the Guard action.</p>
+    <p><b>Hot:</b> After an operative uses this weapon, roll one D6: if the result is less than the weapon’s Hit stat, inflict damage on that operative equal to the result multiplied by two. If it’s used multiple times in one action (e.g. Blast), still only roll one D6.</p>
+    <p><b>Lethal x+:</b> Your successes equal to or greater than x are critical successes, e.g. Lethal 5+.</p>
+    <p><b>Piercing x:</b> The defender collects x less defence dice, e.g. Piercing 1. If the rule is Piercing Crits x, this only comes into effect if you retain any critical successes.</p>
+    <p><b>Relentless:</b> You can re-roll any of your attack dice.</p>
+  </div>
+
+  <div class="foot"><span>Screamer-Killer ‘The Deathdirge of Varl’ · Nemesis Datacard Maker</span><span>Fan-made, not affiliated with Games Workshop.</span></div>
+</div>
+</body>
+</html>

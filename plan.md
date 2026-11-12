@@ -4,12 +4,15 @@ A browser app (static, hosted on GitHub Pages) for building a **Kill Team (2024 
 using the *Nemesis Custom Builder* rules from the *Nemesis Operatives Dossier*, then exporting it as a
 print-ready datacard (PNG or PDF). An exported file can be loaded back into the app to keep editing.
 
+**All rules, card text, the calculation algorithm and the test cases are in [`docs/rules-reference.md`](docs/rules-reference.md), with machine-readable data in [`docs/rules-data.json`](docs/rules-data.json). Those two files override §2 below if they ever differ.**
+
 Visual references live in [`docs/mockups/`](docs/mockups/):
 
 | File | What it shows |
 |---|---|
 | [`datacard.html`](docs/mockups/datacard.html) / [`datacard.png`](docs/mockups/datacard.png) | The two output cards in **KT 2024 datacard format**, filled with the Dossier's Screamer-Killer example |
 | [`app.html`](docs/mockups/app.html) / [`app.png`](docs/mockups/app.png) | Editor layout: step form on the left, live card preview on the right, import/export in the top bar |
+| [`pdf-page.html`](docs/mockups/pdf-page.html) / [`pdf-page.png`](docs/mockups/pdf-page.png) | PDF export page: both cards at true size (A4), cut line, and the **weapon rules reference** below |
 | [`card.css`](docs/mockups/card.css) | Shared card styling. This is the starting point for the real card component |
 
 Sources used: `reference/Kill Team - Nemesis Operatives Dossier.pdf` (builder on pp. 14–20, examples on
@@ -32,6 +35,7 @@ The card format follows the Core Rules "Datacards" page (book p.48, PDF page 50)
 - Weapon profiles are calculated with the trait and modifier changes already applied, as on the official example cards.
 - Rule checking: selection budget, trait count, no duplicate traits, Twinned/Paired targets, NPO behaviour.
 - Export **PNG** (each card, or both side by side) and **PDF** (one card per page at card size, or a print sheet with cut marks).
+- **Weapon rules reference** (PDF option, on by default): below the card(s) on the PDF, every weapon rule used on the cards, in alphabetical order, explained exactly as in the Lite Rules' "Weapon Rules" list (see §4.1).
 - **Import** a PDF/PNG exported by the app, or a `.json` save, and keep editing.
 - Autosave of the current build in the browser (`localStorage`).
 - Deployed to GitHub Pages by a GitHub Actions workflow.
@@ -77,7 +81,7 @@ Kill team operatives allowed alongside the nemesis (shown in the app as info, no
 | T'AU EMPIRE | Supporting Fire | Whenever this operative is within 3" of another friendly T'AU EMPIRE operative, this operative's ranged weapons have the Accurate 1 weapon rule. |
 | TYRANID | Will of the Hive Mind | Ignore changes to this operative's stats from being injured (including its weapons' stats). |
 
-(The official NPO example cards rewrite these rules from the NPO side, e.g. "…shooting an IMPERIUM NPO or friendly IMPERIUM NEMESIS operative…". v1 prints the friendly wording given above. The NPO wording could become a toggle later, see §8.)
+(The table above is the book's friendly wording. The card prints the **official allegiance card wording** instead (`cardText` in docs/rules-data.json).)
 
 ### 2.3 Behaviours (NPO only)
 Each behaviour has a short description, an order rule and a numbered action priority list. Full text is on Dossier p. 15:
@@ -246,6 +250,19 @@ Worst case to test: Large NPO with a Selection 0 melee weapon (up to 4 nemesis t
 - Icons: original SVGs that only echo the KT shapes (triangle, arrow, shield, drop, bullets, blade). No Games Workshop artwork or logos.
 - Calculated values can be highlighted in orange in the editor preview. Exports are plain by default, like official cards.
 
+### 4.1 Weapon rules reference (PDF add-on)
+A **toggle button** lets the user add the weapon rules below the card(s) on the PDF or leave them out. It is **on by default**.
+- **Toggle**: a switch labelled **"Weapon rules on PDF"** in the top bar, directly left of **Export PDF** (see `docs/mockups/app.png`), with an On/Off state label, `role="switch"` + `aria-checked`, and a tooltip. Under the preview, a line shows what the PDF will contain ("PDF will include 7 weapon rules: …"), or "Weapon rules not included" when off.
+- **Persistence**: the choice is stored in the build JSON (`options.weaponRulesOnPdf`, default `true`), so a re-imported PDF/PNG/JSON keeps it. It is also remembered as the user's default for new builds (localStorage, wrapped in try/catch).
+- **Effect**: on → the reference block below the cards (as described here); off → the PDF contains only the cards, using the card-only layouts from §5.2. PNG exports never include it.
+- **Content**: every weapon rule that appears on the printed cards (the WR column, plus weapon rules named in trait/allegiance text, e.g. Fury → Ceaseless/Relentless, Focused Targeting → Punishing, Supporting Fire → Accurate). **Only weapon rules**, no other game terms. Each rule is listed once by its generic name (`Blast 2"` → **Blast x**, `Heavy (Reposition only)` → **Heavy**, `Piercing Crits 1` → **Piercing x**).
+- **Text**: exactly as in the "Weapon Rules" list on the last page of the Kill Team Lite Rules. **Selection x** isn't in the Lite Rules, so it uses the Dossier wording with a small source label.
+- **Order**: alphabetical.
+- **Data & detection**: `docs/rules-data.json → weaponRuleGlossary.entries` (`term`, `text`, `source`, `match` regexes). The rule is in `docs/rules-reference.md` §12. A pure function `weaponRuleReference(card) → entries[]` runs the regexes over the final printed card text; each golden example has an `expected.weaponRuleReference` list for tests.
+- **Layout** (see `docs/mockups/pdf-page.png`): with the option on, the PDF uses an A4/Letter portrait page: card 1 and card 2 at true size (120 × 70 mm) at the top, a dashed cut line, then a `WEAPON RULES` heading with an orange rule and the entries as **Term:** text in 2 columns (Roboto Condensed ~8pt). It continues on a second page if it doesn't fit. Double-sided layout: card 1 + reference on the front page, card 2 in the mirrored position on the back.
+- **Rendering**: real, selectable PDF text via `pdf-lib` + `@pdf-lib/fontkit` with the self-hosted Roboto Condensed (regular + bold), using a simple word-wrap/column layout. (Fallback if that proves fiddly: render the block as HTML and embed it as an image at 3x.)
+- The same entries are used for weapon-rule tooltips in the editor, whether the toggle is on or off.
+
 ---
 
 ## 5. Save / export / import
@@ -261,6 +278,7 @@ type NemesisBuild = {
   size: "S" | "M" | "L"; base: { kind: "round" | "oval" | "custom"; label: string };
   behaviour?: BehaviourId;
   weapons: Array<{ id: string; weaponId: WeaponId; alias?: string; targetId?: string }>;
+  options?: { weaponRulesOnPdf: boolean };   // default true
   traits: TraitId[];
   image?: { dataUrl: string; x: number; y: number; zoom: number };
   createdWith: string;              // app version
@@ -272,7 +290,7 @@ Validated with **zod** on import. Uploaded images are downscaled to a maximum of
 | Format | How | Embedded build data |
 |---|---|---|
 | PNG | `html-to-image` renders the card DOM at 3x. Options: card 1, card 2, or both side by side | `iTXt` chunk `nemesis-datacard` containing the build JSON (small chunk writer, no heavy dependency) |
-| PDF | `pdf-lib`: embed the PNG(s). Layout A: one card per page at card size. Layout B: A4/Letter sheet with both cards (plus cut marks) | JSON **file attachment** `nemesis-build.json` + a custom Info-dictionary key as a fallback |
+| PDF | `pdf-lib`: embed the PNG(s). Layout A: one card per page at card size. Layout B: A4/Letter sheet with both cards (plus cut marks). **Weapon rules reference on** (default): A4/Letter page with the cards on top and the reference below (§4.1) | JSON **file attachment** `nemesis-build.json` + a custom Info-dictionary key as a fallback |
 | JSON | Plain download | It *is* the build |
 
 File name: `nemesis-<name-keyword>-<size>.png|pdf`.
@@ -302,7 +320,7 @@ src/
   editor/      StepOperative.tsx StepAllegiance.tsx StepSize.tsx StepBehaviour.tsx StepWeapons.tsx StepTraits.tsx ImageCropper.tsx
   io/          exportPng.ts  exportPdf.ts  pngText.ts  importFile.ts
   App.tsx  main.tsx
-tests/         derive.test.ts (golden examples)  validate.test.ts  io.roundtrip.test.ts
+tests/         derive.test.ts (golden examples)  validate.test.ts  weaponRules.test.ts  io.roundtrip.test.ts
 public/fonts/  Oswald + Roboto Condensed (woff2)
 .github/workflows/deploy.yml
 ```
@@ -319,24 +337,27 @@ public/fonts/  Oswald + Roboto Condensed (woff2)
 3. **Card components**: Datacard (front) + second card in KT 2024 format from the mockup CSS, ability-block flow between cards, `fitText`, self-hosted fonts, worst-case fixtures.
 4. **Editor**: six steps, live preview tabs, validation status, autosave.
 5. **Picture upload**: file/drag-drop, downscale, pan/zoom cropper.
-6. **Export**: PNG (single/both), PDF (card-size pages + print sheet), embedded build data.
+6. **Export**: PNG (single/both), PDF (card-size pages + print sheet), embedded build data, and the **weapon rules reference** below the cards (§4.1) with tests against each example's `expected.weaponRuleReference`.
 7. **Import**: JSON/PNG/PDF round-trip tests, migration hook, error states.
 8. **Polish**: mobile layout (editor and preview stacked), keyboard access, empty states, "Load example" (the four Dossier builds), fan-content disclaimer footer.
 9. **Release**: README with usage, deploy, and a check that print size matches real cards.
 
 ---
 
-## 8. Open questions (need your decision)
+## 8. Decisions (confirmed)
 
-1. **Physical card size**: the plan uses 120 × 70 mm, based on the ratio of the Core Rules example. Please measure a real KT 2024 datacard to confirm.
-2. **Rules text on the card**: the rules card prints the Dossier rules text word for word (ktdash.app does the same). Fine for a free fan tool, or would you prefer short paraphrases?
-3. **Card colour**: always the standard KT 2024 orange, or a different accent colour per allegiance?
-4. **NPO wording**: should NPO cards use the Dossier's NPO-side wording for allegiance traits ("IMPERIUM NPO or friendly IMPERIUM NEMESIS operative…"), as the example cards do?
-5. **Rule interpretations**: if Fury and Waaagh! both worsen ranged Hit, does that stack (−2)? Can Twinned/Paired be taken twice on different weapons? Default: stack, max one modifier per target. Please confirm against the core rules.
-6. **Highlight changed stats** on exported cards (helpful) or keep them plain (like the official cards)? Default: plain on export, highlighted in the preview.
-7. **Double-sided printing**: card 2 as the back of card 1 (official datacard style), or two separate front-facing cards? Both are planned as PDF layouts; which should be the default?
+These were the open questions; all are now decided. Each one is a setting in the app's export/settings panel and is listed in the README.
 
-## 9. Repo housekeeping (do in milestone 1)
-- The ignore file is named `.gitnore`. It must be **`.gitignore`**, otherwise `reference/` (about 55 MB of copyrighted PDFs) will be committed and published with the public Pages repo.
-- `src/` exists but is empty; the scaffold will fill it.
-- Add a fan-made disclaimer (not affiliated with Games Workshop; Kill Team is a trademark of Games Workshop) to the app footer and README.
+1. **Physical card size**: **120 × 70 mm** (designed at 1200 × 700 px), based on the ratio of the Core Rules datacard example. The size can be changed in the export settings if a real card measures differently.
+2. **Rules text on the card**: print the rules text **word for word** (the official card/Dossier wording, as ktdash.app does). Flavour text is not printed on the cards; it is used for editor tooltips only.
+3. **Card colour**: always the standard **KT 2024 orange** (`#e8641c`). The `--faction` CSS variable stays, so a per-allegiance accent could be added later as an option.
+4. **Allegiance wording**: print the **official allegiance card wording** (`cardText` in rules-data.json), which covers both NPO and friendly use.
+5. **Rule interpretations**: Fury and Waaagh! Hit penalties **stack** (−2), with a warning in the editor. **At most one** Twinned/Paired per target weapon; the target must be a different pick of the right type.
+6. **Highlighting calculated stats**: highlighted in the **editor preview only**; exported cards are plain, like official cards (optional export setting to keep the highlights).
+7. **Printing layout**: without the weapon rules reference, the PDF default is **two separate cards** (one 120 × 70 mm card per page). Also available: card 2 as the back of card 1 (double-sided), and an A4/Letter print sheet with cut marks.
+8. **Weapon rules reference**: a user **toggle button** ("Weapon rules on PDF", next to Export PDF), **on by default**; the user can switch it off to leave the rules out. With it on, the PDF is an A4/Letter page with both cards at true size and the reference below (§4.1). Only weapon rules are listed, alphabetically, with the Lite Rules text verbatim.
+
+## 9. Repo housekeeping (done)
+- ✅ The ignore file is now correctly named **`.gitignore`**. It ignores `/reference/` (the copyrighted PDFs), `node_modules/`, `dist/` and `coverage/`, so the rulebooks are never committed or published.
+- ✅ `src/` is scaffolded (Vite + React + TS, vitest, lint, Pages workflow) on branch `feat/datacard-maker`.
+- ✅ A fan-made disclaimer (not affiliated with Games Workshop; Kill Team is a trademark of Games Workshop) is in the app. It still needs adding to the README when that's written.
