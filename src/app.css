@@ -41,6 +41,8 @@ button, input, select { font: inherit; color: inherit; }
   box-shadow: 0 10px 30px rgba(0,0,0,.5);
 }
 .menu-pop .opt { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+.menu-pop .btn { width: 100%; justify-content: flex-start; text-transform: none; letter-spacing: .02em; font-size: 15px; }
+.menu-pop .note { font-size: 12px; }
 .menu-pop hr { border: 0; border-top: 1px solid var(--line); margin: 2px 0; width: 100%; }
 
 /* ---------- layout ---------- */
@@ -167,6 +169,8 @@ table.mini td { padding: 2px 6px; text-align: center; border-left: 1px solid var
 .check { display: flex; gap: 6px; align-items: center; cursor: pointer; }
 .check input { accent-color: var(--accent); }
 
+.empty-hint { margin-bottom: 12px; line-height: 1.6; }
+.linkbtn { border: 0; background: none; color: #ffb88f; padding: 0; cursor: pointer; text-decoration: underline; font: inherit; }
 .disclaimer { padding: 6px 20px; font-size: 12px; color: #8a8a92; background: #111; border-top: 1px solid var(--line); text-align: center; }
 
 /* drag-and-drop import overlay */
