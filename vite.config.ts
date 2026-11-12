@@ -8,8 +8,8 @@ import { readFileSync } from "node:fs";
 const REPO = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "killteam_nemesis_operative_datacard_maker";
 const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string };
 
-export default defineConfig(({ command }) => ({
-  base: process.env.VITE_BASE ?? (command === "build" ? `/${REPO}/` : "/"),
+export default defineConfig(({ command, isPreview }) => ({
+  base: process.env.VITE_BASE ?? (command === "build" || isPreview ? `/${REPO}/` : "/"),
   plugins: [react()],
   server: { watch: { ignored: ["**/reference/**", "**/docs/**"] } },
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },

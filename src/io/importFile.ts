@@ -1,6 +1,5 @@
 import { BuildImportError, migrateBuild } from "../model/migrate";
 import type { NemesisBuild } from "../model/schema";
-import { readPdfBuildJson } from "./pdf";
 import { isPngBytes, readPngText } from "./pngText";
 
 const NOT_OURS = "This file wasn't exported by Nemesis Datacard Maker, so it has no build data to load. (Other PDFs or images can't be turned back into a build.)";
@@ -39,6 +38,7 @@ export async function importBytes(name: string, bytes: Uint8Array): Promise<Neme
     case "pdf": {
       let text: string | undefined;
       try {
+        const { readPdfBuildJson } = await import("./pdf");
         text = await readPdfBuildJson(bytes);
       } catch {
         throw new BuildImportError("This PDF couldn't be opened.");

@@ -1,6 +1,6 @@
 import { CONFIG } from "../config";
 import type { NemesisBuild } from "../model/schema";
-import { buildPdf, type PdfLayout } from "./pdf";
+import type { PdfLayout } from "./pdf";
 import { writePngText } from "./pngText";
 import { renderToPng } from "./renderCard";
 
@@ -28,6 +28,7 @@ export async function exportPdf(cards: HTMLElement[], build: NemesisBuild, layou
   const pngs: Uint8Array[] = [];
   for (const c of cards) pngs.push(await renderNodePng(c));
   const title = `${build.name || "Nemesis operative"} – Nemesis datacard`;
+  const { buildPdf } = await import("./pdf"); // pdf-lib is loaded on demand
   const pdf = await buildPdf(pngs, buildToJson(build), layout, title);
   return new Blob([pdf as BlobPart], { type: "application/pdf" });
 }

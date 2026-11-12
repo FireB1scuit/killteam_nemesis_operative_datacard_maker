@@ -17,6 +17,17 @@ import type { PdfLayout } from "./io/pdf";
 import { importFile } from "./io/importFile";
 import "./app.css";
 
+const CARD_PAGES: { id: PdfLayout; label: string } = {
+  id: "cards",
+  label: `Two separate cards (${CONFIG.cardWidthMm} × ${CONFIG.cardHeightMm} mm pages)`,
+};
+const SHEETS: { id: PdfLayout; label: string }[] = [
+  { id: "sheet-a4", label: "A4 sheet with cut marks" },
+  { id: "sheet-letter", label: "Letter sheet with cut marks" },
+];
+/** Export PDF menu, with the configured default layout (CONFIG.defaultPdfLayout) first. */
+const PDF_LAYOUTS = CONFIG.defaultPdfLayout === "cards" ? [CARD_PAGES, ...SHEETS] : [...SHEETS, CARD_PAGES];
+
 type Toast = { kind: "ok" | "error"; text: string } | null;
 
 function Editor() {
@@ -175,9 +186,9 @@ function Editor() {
         <Menu label={busy ? "Exporting…" : "Export PDF"} primary disabled={busy}>
           {(close) => (
             <>
-              <button type="button" className="btn" onClick={() => { close(); void doPdf("cards"); }}>Two separate cards (120 × 70 mm pages)</button>
-              <button type="button" className="btn" onClick={() => { close(); void doPdf("sheet-a4"); }}>A4 sheet with cut marks</button>
-              <button type="button" className="btn" onClick={() => { close(); void doPdf("sheet-letter"); }}>Letter sheet with cut marks</button>
+              {PDF_LAYOUTS.map((l) => (
+                <button key={l.id} type="button" className="btn" onClick={() => { close(); void doPdf(l.id); }}>{l.label}</button>
+              ))}
               <hr />
               <label className="opt"><input type="checkbox" checked={exportHighlight} onChange={(e) => setExportHighlight(e.target.checked)} /> Highlight calculated values</label>
               <span className="note">Print at 100% (actual size). Your build is attached to the PDF.</span>
@@ -219,7 +230,7 @@ function Editor() {
               <input type="checkbox" checked={highlight} onChange={(e) => setHighlight(e.target.checked)} />
               Highlight calculated values (preview only)
             </label>
-            <span>Exports embed your build data, so you can re-import the PDF or PNG later to keep editing.</span>
+            <span className="longnote">Exports embed your build data, so you can re-import the PDF or PNG later to keep editing.</span>
             {dirty && <span className="muted">· Unsaved changes (autosaved in this browser)</span>}
           </div>
         </section>
