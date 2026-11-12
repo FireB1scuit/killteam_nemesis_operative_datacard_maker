@@ -29,7 +29,11 @@ export const RulesCard = forwardRef<HTMLDivElement, CardProps & { overflowBlocks
           </div>
           {hasPrio ? (
             <ol className="prio">
-              {a.priorities!.map((s, i) => <li key={i}><b>{s.action}</b>{s.rest}</li>)}
+              {a.priorities!.map((s, i) => {
+                // Bold the action name and its full stop ("Fight." / "Reposition. If possible…").
+                const dot = s.rest.startsWith(".");
+                return <li key={i}><b>{s.action}{dot ? "." : ""}</b>{dot ? s.rest.slice(1) : s.rest}</li>;
+              })}
             </ol>
           ) : (
             <div>{a.restrictions.map((r, i) => <p key={i} className="res">{r}</p>)}</div>

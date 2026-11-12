@@ -22,4 +22,4 @@ export function normaliseBaseLabel(label: string): { kind: "round" | "oval"; lab
 }
 
 /** Default base per size. */
-export const DEFAULT_BASE: Record<"S" | "M" | "L", string> = { S: "50", M: "60", L: "90" };
+export const DEFAULT_BASE: Record<"S" | "M" | "L", string> = { S: "50", M: "80", L: "90" };

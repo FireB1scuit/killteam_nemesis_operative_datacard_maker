@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import type { BuildImage } from "../model/schema";
 import { processImageFile } from "../io/image";
 
@@ -30,6 +30,23 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
   };
 
   const update = (patch: Partial<BuildImage>) => image && onChange({ ...image, ...patch });
+
+  // Wheel zoom needs a non-passive listener so the form doesn't scroll at the same time.
+  const frameRef = useRef<HTMLDivElement>(null);
+  const latest = useRef({ image, onChange });
+  latest.current = { image, onChange };
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      const { image: img, onChange: set } = latest.current;
+      if (!img) return;
+      e.preventDefault();
+      set({ ...img, zoom: clamp(img.zoom - e.deltaY * 0.0015, 1, 5) });
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
 
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (!image) return;
@@ -90,6 +107,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
       }}
     >
       <div
+        ref={frameRef}
         className={`frame${image ? " has" : ""}`}
         role={image ? "img" : undefined}
         aria-label={image ? "Picture position: drag or use arrow keys to move, + and - to zoom" : undefined}
@@ -98,7 +116,6 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
         onPointerMove={onPointerMove}
         onPointerUp={() => (drag.current = null)}
         onPointerCancel={() => (drag.current = null)}
-        onWheel={(e) => image && update({ zoom: clamp(image.zoom - e.deltaY * 0.0015, 1, 5) })}
         onKeyDown={onKey}
         onClick={() => !image && fileRef.current?.click()}
       >

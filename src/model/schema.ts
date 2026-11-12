@@ -61,7 +61,7 @@ export function emptyBuild(): NemesisBuild {
     name: "",
     nameKeyword: "",
     size: "M",
-    base: { kind: "round", label: "60" },
+    base: { kind: "round", label: "80" },
     weapons: [],
     traits: [],
     createdWith: typeof __APP_VERSION__ === "string" ? __APP_VERSION__ : "dev",

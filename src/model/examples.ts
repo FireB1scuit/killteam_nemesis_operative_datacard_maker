@@ -11,7 +11,7 @@ export const EXAMPLES: { id: string; label: string; build: NemesisBuild }[] = [
     label: "Armoured Sentinel ‘Armourbane’",
     build: build({
       operativeType: "npo", name: "Armoured Sentinel", moniker: "Armourbane", nameKeyword: "ARMOURED SENTINEL",
-      allegiance: "IMPERIUM", size: "M", base: { kind: "round", label: "60" }, behaviour: "marksman",
+      allegiance: "IMPERIUM", size: "M", base: { kind: "round", label: "80" }, behaviour: "marksman",
       weapons: [
         { id: "as-1", weaponId: "plasmaCannon" },
         { id: "as-2", weaponId: "closeCombatWeapon" },
@@ -24,7 +24,7 @@ export const EXAMPLES: { id: string; label: string; build: NemesisBuild }[] = [
     label: "XV8 Crisis Battlesuit ‘Shas’ui Nomura’",
     build: build({
       operativeType: "npo", name: "XV8 Crisis Battlesuit", moniker: "Shas’ui Nomura", nameKeyword: "XV8 CRISIS BATTLESUIT",
-      allegiance: "TAU_EMPIRE", size: "S", base: { kind: "round", label: "60" }, behaviour: "marksman",
+      allegiance: "TAU_EMPIRE", size: "S", base: { kind: "round", label: "50" }, behaviour: "marksman",
       weapons: [
         { id: "xv-1", weaponId: "meltagun", alias: "Meltaguns" },
         { id: "xv-2", weaponId: "twinned", targetId: "xv-1" },
