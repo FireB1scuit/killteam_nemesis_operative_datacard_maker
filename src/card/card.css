@@ -1,0 +1,167 @@
+/* Nemesis datacard, Kill Team 2024 (3rd edition) datacard format.
+   Ported from docs/mockups/card.css. Designed at 1200 x 700 CSS px (= 120 x 70 mm at 10 px/mm).
+   All rules are scoped under .kt-card. --fs scales the body text (fitText). */
+
+.kt-card {
+  --kt-orange: #e8641c;
+  --kt-orange-dark: #c24f10;
+  --kt-ink: #1d1d1d;
+  --kt-ink-soft: #444;
+  --kt-body: #e6e5e1;
+  --kt-row: #d3d2ce;
+  --kt-tile: #202020;
+  --kt-green: #27a844;
+  --kt-red: #c8202f;
+  --faction: var(--kt-orange);
+  --fs: 1;
+
+  box-sizing: border-box;
+  width: 1200px;
+  height: 700px;
+  position: relative;
+  border-radius: 34px;
+  overflow: hidden;
+  font-family: "Roboto Condensed", "Arial Narrow", sans-serif;
+  color: var(--kt-ink);
+  text-align: left;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(0, 0, 0, 0.06), transparent 55%),
+    repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.018) 0 2px, transparent 2px 7px),
+    var(--kt-body);
+  display: grid;
+  grid-template-rows: 128px minmax(0, 1fr) 62px;
+}
+.kt-card *, .kt-card *::before, .kt-card *::after { box-sizing: border-box; }
+.kt-card.shadow { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
+
+/* ---------- header: name · picture · stat tiles ---------- */
+.kt-card .kt-head {
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, #262626, #121212);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px auto;
+  align-items: stretch;
+  min-width: 0;
+}
+.kt-card .kt-head .name { padding: 24px 12px 0 46px; color: #fff; align-self: start; min-width: 0; position: relative; z-index: 1; }
+.kt-card .kt-head h1 {
+  display: inline-block; margin: 0; padding-bottom: 6px; max-width: 100%;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 44px; line-height: 1;
+  text-transform: uppercase; letter-spacing: 0.01em; white-space: nowrap;
+  border-bottom: 4px solid var(--faction);
+}
+.kt-card .kt-head .moniker {
+  margin-top: 7px; font-family: "Oswald", sans-serif; font-weight: 400; font-size: 20px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #cfcfcf; white-space: nowrap;
+}
+
+/* model picture: sits next to the stat tiles and fades into the header on the left */
+.kt-card .kt-head .pic {
+  position: relative; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 35%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 35%);
+}
+.kt-card .kt-head .pic img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.kt-card .kt-head .pic .ph { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.kt-card .stats { display: flex; gap: 8px; padding: 0 22px 0 8px; align-items: stretch; }
+.kt-card .stat {
+  width: 104px; background: var(--kt-tile);
+  border-left: 1px solid #3a3a3a; border-right: 1px solid #3a3a3a;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 14px 0 10px; color: #fff;
+}
+.kt-card .stat .k { font-family: "Oswald", sans-serif; font-weight: 400; font-size: 20px; letter-spacing: 0.04em; text-transform: uppercase; }
+.kt-card .stat .k.small { font-size: 17px; }
+.kt-card .stat .v {
+  display: flex; align-items: center; gap: 4px;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 52px; line-height: 1;
+}
+.kt-card .stat .v svg { width: 32px; height: 36px; fill: var(--faction); flex: none; }
+.kt-card .stat .v .plus { font-size: 30px; align-self: flex-end; margin-bottom: 4px; }
+
+/* ---------- body ---------- */
+.kt-card .kt-body {
+  padding: 8px 46px 6px; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.kt-card .kt-body.c2 { padding-top: 14px; }
+
+.kt-card table.weapons { width: 100%; border-collapse: collapse; font-size: calc(21px * var(--fs)); flex: none; }
+.kt-card table.weapons th {
+  text-align: left; font-family: "Oswald", sans-serif; font-weight: 500; font-size: calc(23px * var(--fs));
+  letter-spacing: 0.02em; text-transform: uppercase; padding: calc(6px * var(--fs)) 8px calc(5px * var(--fs));
+  border-bottom: 3px solid var(--faction);
+}
+.kt-card table.weapons th.c, .kt-card table.weapons td.c { text-align: center; }
+.kt-card table.weapons td { padding: calc(6px * var(--fs)) 8px; vertical-align: top; font-weight: 500; line-height: 1.2; }
+.kt-card table.weapons tbody tr:nth-child(even) td { background: var(--kt-row); }
+.kt-card table.weapons tbody tr:last-child td { border-bottom: 3px solid var(--faction); }
+.kt-card table.weapons td.ico { width: 46px; padding-right: 0; }
+.kt-card table.weapons td.ico svg { width: 34px; height: 22px; fill: var(--faction); margin-top: 1px; display: block; }
+.kt-card table.weapons td.n { width: 34%; }
+.kt-card table.weapons td.c { width: 62px; }
+.kt-card table.weapons td.wr { font-size: calc(19.5px * var(--fs)); }
+.kt-card table.weapons tr.empty td { color: #888; font-style: italic; font-weight: 400; }
+.kt-card.hl .mod { color: var(--kt-orange-dark); }
+
+/* abilities: balanced two-column flow; overflow is detected by scrollWidth */
+.kt-card .abil {
+  columns: 2; column-gap: 34px; column-fill: balance;
+  padding-top: calc(12px * var(--fs)); flex: 1 1 auto; min-height: 0;
+}
+.kt-card .abil.flat { flex: 0 0 auto; }
+.kt-card .ab { break-inside: avoid; }
+.kt-card .ab p { margin: 0 0 calc(9px * var(--fs)); font-size: calc(18px * var(--fs)); line-height: 1.3; }
+.kt-card .ab p b { font-weight: 700; }
+.kt-card .ab p i { font-style: italic; }
+.kt-card .ab ul { margin: calc(-4px * var(--fs)) 0 calc(9px * var(--fs)); padding-left: 20px; font-size: calc(16.5px * var(--fs)); line-height: 1.28; }
+.kt-card .ab ul li { margin: 0; }
+
+.kt-card .actbar {
+  display: flex; justify-content: space-between; align-items: center; flex: none;
+  background: var(--faction); color: #fff; padding: calc(4px * var(--fs)) 12px;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: calc(21px * var(--fs)); letter-spacing: 0.03em;
+  text-transform: uppercase; margin-bottom: calc(8px * var(--fs));
+}
+.kt-card .act { display: grid; grid-template-columns: 1fr 1fr; gap: 0 34px; flex: none; }
+.kt-card .eff, .kt-card .res {
+  position: relative; padding-left: 28px; margin: 0 0 calc(8px * var(--fs));
+  font-size: calc(18px * var(--fs)); line-height: 1.3;
+}
+.kt-card .eff::before {
+  content: ""; position: absolute; left: 2px; top: calc(3px * var(--fs));
+  border-left: 18px solid var(--kt-green); border-top: 10px solid transparent; border-bottom: 10px solid transparent;
+}
+.kt-card .res::before {
+  content: ""; position: absolute; left: 3px; top: calc(4px * var(--fs)); width: 14px; height: 14px;
+  background: var(--kt-red); transform: rotate(45deg);
+}
+.kt-card ol.prio { margin: 0; padding-left: 24px; font-size: calc(18px * var(--fs)); line-height: 1.32; }
+.kt-card ol.prio li::marker { color: var(--faction); font-weight: 700; }
+.kt-card .sep { border-top: 3px solid var(--faction); margin-top: calc(10px * var(--fs)); flex: none; }
+.kt-card .sep + .abil { padding-top: calc(10px * var(--fs)); }
+
+/* ---------- footer: keywords · size · base ---------- */
+.kt-card .kt-foot {
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 4px),
+    #141414;
+  color: #fff; display: flex; align-items: center; gap: 18px; padding: 0 30px 0 46px; min-width: 0;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 22px; letter-spacing: 0.03em; text-transform: uppercase;
+}
+.kt-card .kt-foot .kw { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kt-card .kt-foot .kw .fk { color: var(--faction); }
+.kt-card .kt-foot .sz { font-size: 18px; color: #cfcfcf; letter-spacing: 0.06em; white-space: nowrap; }
+.kt-card .kt-foot .base {
+  min-width: 44px; height: 44px; border-radius: 50%; border: 2px solid #fff; flex: none;
+  display: grid; place-items: center; font-size: 19px; padding: 0 4px; white-space: nowrap;
+}
+.kt-card .kt-foot .base.oval { min-width: 76px; border-radius: 22px; font-size: 15px; padding: 0 8px; }
+.kt-card .kt-foot .base.long { font-size: 15px; }
+.kt-card .kt-foot .pg { font-size: 15px; color: #9a9a9a; letter-spacing: 0.1em; white-space: nowrap; }
