@@ -1,0 +1,151 @@
+/* Nemesis datacard mockup styles, Kill Team 2024 (3rd edition) datacard format.
+   Reference: Core Rules p.48 "Datacards" (PDF page 50) and the Kommando Dakka Boy card.
+   Card is designed at 1200 x 700 CSS px (= 120 x 70 mm at 10px/mm).
+   Export renders the same DOM at pixelRatio 3 → 3600 x 2100 px (~760 dpi at 120mm; downsample as needed). */
+
+:root {
+  --kt-orange: #e8641c;
+  --kt-orange-dark: #c24f10;
+  --kt-ink: #1d1d1d;
+  --kt-ink-soft: #444;
+  --kt-body: #e6e5e1;
+  --kt-row: #d3d2ce;
+  --kt-dark: #181818;
+  --kt-tile: #202020;
+  --kt-green: #27a844;
+  --kt-red: #c8202f;
+  --faction: var(--kt-orange);      /* accent; swappable theme */
+}
+
+.card {
+  width: 1200px;
+  height: 700px;
+  position: relative;
+  border-radius: 34px;
+  overflow: hidden;
+  font-family: "Roboto Condensed", "Arial Narrow", sans-serif;
+  color: var(--kt-ink);
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(255,255,255,.55), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(0,0,0,.06), transparent 55%),
+    repeating-linear-gradient(115deg, rgba(0,0,0,.018) 0 2px, transparent 2px 7px),
+    var(--kt-body);
+  display: grid;
+  grid-template-rows: 128px 1fr 62px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* ---------- header: name · picture · stat tiles ---------- */
+.kt-head {
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, #262626, #121212);
+  display: grid;
+  grid-template-columns: 1fr 260px auto;
+  align-items: stretch;
+}
+.kt-head .name { padding: 24px 0 0 46px; color: #fff; align-self: start; }
+.kt-head .tag {
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 16px;
+  letter-spacing: .12em; color: var(--faction); text-transform: uppercase; margin-bottom: 2px;
+}
+.kt-head h1 {
+  display: inline-block; margin: 0; padding-bottom: 6px;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 44px; line-height: 1;
+  text-transform: uppercase; letter-spacing: .01em;
+  border-bottom: 4px solid var(--faction);
+}
+.kt-head .moniker {
+  margin-top: 7px; font-family: "Oswald", sans-serif; font-size: 20px; letter-spacing: .06em;
+  text-transform: uppercase; color: #cfcfcf;
+}
+
+/* model picture: sits in the header next to the stat tiles, fades into the header on the left */
+.kt-head .pic {
+  position: relative; overflow: hidden;
+  background: center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 35%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 35%);
+}
+.kt-head .pic.placeholder {
+  background:
+    radial-gradient(circle at 60% 60%, #6a6a6a 0 26%, transparent 27%),
+    radial-gradient(circle at 60% 18%, #7a7a7a 0 13%, transparent 14%),
+    #333;
+}
+
+.stats { display: flex; gap: 8px; padding: 0 22px 0 8px; align-items: stretch; }
+.stat {
+  width: 104px; background: var(--kt-tile);
+  border-left: 1px solid #3a3a3a; border-right: 1px solid #3a3a3a;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 14px 0 10px; color: #fff;
+}
+.stat .k { font-family: "Oswald", sans-serif; font-size: 20px; letter-spacing: .04em; text-transform: uppercase; }
+.stat .k.small { font-size: 17px; }
+.stat .v { display: flex; align-items: center; gap: 4px;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 52px; line-height: 1; }
+.stat .v svg { width: 32px; height: 36px; fill: var(--faction); }
+.stat .v .plus { font-size: 30px; align-self: flex-end; margin-bottom: 4px; }
+
+/* ---------- body ---------- */
+.kt-body { padding: 8px 46px 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+
+table.weapons { width: 100%; border-collapse: collapse; font-size: 21px; }
+table.weapons th {
+  text-align: left; font-family: "Oswald", sans-serif; font-weight: 500; font-size: 23px;
+  letter-spacing: .02em; text-transform: uppercase; padding: 6px 8px 5px;
+  border-bottom: 3px solid var(--faction);
+}
+table.weapons th.c, table.weapons td.c { text-align: center; }
+table.weapons td { padding: 6px 8px; vertical-align: top; font-weight: 500; }
+table.weapons tbody tr:nth-child(even) td { background: var(--kt-row); }
+table.weapons tbody tr:last-child td { border-bottom: 3px solid var(--faction); }
+table.weapons td.ico { width: 46px; padding-right: 0; }
+table.weapons td.ico svg { width: 34px; height: 22px; fill: var(--faction); margin-top: 2px; }
+table.weapons td.n { width: 34%; }
+table.weapons td.n small { display: block; font-size: 15px; font-weight: 400; font-style: italic; color: var(--kt-ink-soft); }
+table.weapons td.c { width: 62px; }
+table.weapons td.wr { font-size: 19.5px; }
+table.weapons .mod { color: var(--kt-orange-dark); } /* preview-only highlight of calculated values */
+
+/* abilities: plain rules on the left, action bars on the right (like the Core Rules example) */
+.abil { display: grid; grid-template-columns: 1fr 1fr; gap: 0 34px; padding-top: 12px; flex: 1; min-height: 0; }
+.abil.one { grid-template-columns: 1fr; }
+.ab p { margin: 0 0 9px; font-size: 18px; line-height: 1.3; }
+.ab p b { font-weight: 700; }
+.ab ul { margin: 0 0 9px; padding-left: 20px; font-size: 16.5px; line-height: 1.28; }
+
+.actbar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--faction); color: #fff; padding: 4px 12px;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 21px; letter-spacing: .03em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.actbar.full { grid-column: 1 / -1; }
+.eff, .res { position: relative; padding-left: 28px; margin: 0 0 8px; font-size: 18px; line-height: 1.3; }
+.eff::before { content: ""; position: absolute; left: 2px; top: 3px;
+  border-left: 18px solid var(--kt-green); border-top: 10px solid transparent; border-bottom: 10px solid transparent; }
+.res::before { content: ""; position: absolute; left: 3px; top: 4px; width: 14px; height: 14px;
+  background: var(--kt-red); transform: rotate(45deg); }
+ol.prio { margin: 0; padding-left: 24px; font-size: 18px; line-height: 1.32; }
+ol.prio li::marker { color: var(--faction); font-weight: 700; }
+
+/* ---------- footer: keywords · size · base ---------- */
+.kt-foot {
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 4px),
+    #141414;
+  color: #fff; display: flex; align-items: center; gap: 18px; padding: 0 30px 0 46px;
+  font-family: "Oswald", sans-serif; font-weight: 500; font-size: 22px; letter-spacing: .03em; text-transform: uppercase;
+}
+.kt-foot .kw { flex: 1; }
+.kt-foot .kw .fk { color: var(--faction); }
+.kt-foot .sz { font-size: 18px; color: #cfcfcf; letter-spacing: .06em; }
+.kt-foot .base {
+  width: 44px; height: 44px; border-radius: 50%; border: 2px solid #fff;
+  display: grid; place-items: center; font-size: 19px;
+}
+.kt-foot .base.oval { width: 68px; border-radius: 22px; font-size: 15px; }
+.kt-foot .pg { font-size: 15px; color: #9a9a9a; letter-spacing: .1em; }

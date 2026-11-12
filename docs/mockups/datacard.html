@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nemesis Datacard Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Roboto+Condensed:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="card.css">
+<style>
+  body { margin: 0; padding: 40px; background: #555; display: flex; flex-direction: column; gap: 34px; align-items: center; }
+  .caption { color: #eee; font: 16px/1.45 "Roboto Condensed", sans-serif; width: 1200px; }
+  .caption b { color: #ffb88f; }
+</style>
+</head>
+<body>
+
+<!-- Icon sprite: original placeholder glyphs (no GW artwork) -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-control" viewBox="0 0 24 24"><path d="M2 4h20L12 21z"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M3 21 15 9l-4-1 11-6-4 11-1-4L5 21z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M3 3h18v9c0 5-4 8-9 10-5-2-9-5-9-10z"/></symbol>
+  <symbol id="i-wounds" viewBox="0 0 24 24"><path d="M12 1c2 6 5 11 5 15a5 5 0 0 1-10 0c0-4 3-9 5-15z"/></symbol>
+  <symbol id="i-ranged" viewBox="0 0 34 22"><rect x="1" y="7" width="8" height="14" rx="4"/><rect x="13" y="7" width="8" height="14" rx="4"/><rect x="25" y="7" width="8" height="14" rx="4"/></symbol>
+  <symbol id="i-melee" viewBox="0 0 34 22"><path d="M1 9h21v4H1z"/><path d="M22 7h4v8h-4z"/><path d="M26 10h7v2h-7z"/></symbol>
+</svg>
+
+<div class="caption"><b>Card 1/2 (front): Datacard.</b> Kill Team 2024 datacard format (Core Rules p.48): name with orange underline, the model picture in the header next to the stat tiles, weapon table between orange rules, abilities underneath, and a keyword footer with the base-size circle. Nemesis changes: <b>CONTROL</b> replaces APL, the moniker sits under the name, the footer shows the size, and the abilities hold the allegiance trait and nemesis traits. Weapon values are calculated (Paired + Fury applied); the orange highlight appears in the preview only.</div>
+
+<div class="card" id="card1">
+  <header class="kt-head">
+    <div class="name">
+      <h1>Screamer-Killer</h1>
+      <div class="moniker">‘The Deathdirge of Varl’</div>
+    </div>
+    <div class="pic placeholder"></div>
+    <div class="stats">
+      <div class="stat"><div class="k small">Control</div><div class="v"><svg><use href="#i-control"/></svg>6</div></div>
+      <div class="stat"><div class="k">Move</div><div class="v"><svg><use href="#i-move"/></svg>6"</div></div>
+      <div class="stat"><div class="k">Save</div><div class="v"><svg><use href="#i-save"/></svg>4<span class="plus">+</span></div></div>
+      <div class="stat"><div class="k">Wounds</div><div class="v"><svg><use href="#i-wounds"/></svg>75</div></div>
+    </div>
+  </header>
+
+  <div class="kt-body">
+    <table class="weapons">
+      <thead><tr><th></th><th>Name</th><th class="c">Atk</th><th class="c">Hit</th><th class="c">Dmg</th><th>WR</th></tr></thead>
+      <tbody>
+        <tr><td class="ico"><svg><use href="#i-ranged"/></svg></td><td class="n">Bio-plasmic scream (standard)</td>
+            <td class="c">4</td><td class="c"><span class="mod">4+</span></td><td class="c">4/6</td><td class="wr">Blast 2", Heavy (Reposition only), Piercing 1</td></tr>
+        <tr><td class="ico"><svg><use href="#i-ranged"/></svg></td><td class="n">Bio-plasmic scream (supercharge)</td>
+            <td class="c">4</td><td class="c"><span class="mod">4+</span></td><td class="c">5/6</td><td class="wr">Blast 2", Heavy (Reposition only), Hot, Lethal 5+, Piercing 1</td></tr>
+        <tr><td class="ico"><svg><use href="#i-melee"/></svg></td><td class="n">Paired scything talons</td>
+            <td class="c"><span class="mod">6</span></td><td class="c">3+</td><td class="c">4/6</td><td class="wr"><span class="mod">Relentless</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="abil">
+      <div class="ab">
+        <p><b>Will of the Hive Mind:</b> Ignore changes to this operative’s stats from being injured (including its weapons’ stats).</p>
+        <p><b>Fury:</b> This operative’s melee weapons have the Ceaseless weapon rule; if the weapon already has that weapon rule, it has the Relentless weapon rule. Worsen the Hit stat of this operative’s ranged weapons by 1.</p>
+      </div>
+      <div class="ab">
+        <p><b>Nemesis:</b> Extra Defence, Bulky, Towering Size <i>(see other card)</i>.</p>
+        <p><b>Control:</b> Use this operative’s CONTROL stat instead of APL in all instances except spending action points.</p>
+        <p><b>Behaviour:</b> Battler <i>(see other card)</i>.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="kt-foot">
+    <div class="kw"><span class="fk">Tyranid</span>, Nemesis, Screamer-Killer</div>
+    <div class="sz">NPO · Size: Large</div>
+    <div class="pg">1/2</div>
+    <div class="base">90</div>
+  </footer>
+</div>
+
+<div class="caption"><b>Card 2/2 (back / second card): Behaviour &amp; core Nemesis rules.</b> The behaviour uses the action-box style (orange bar, ▶ effect, ◆ restriction) with its priority list. The core Nemesis rules are written out as abilities, so the two cards hold everything needed in play. For a <i>player</i> operative the behaviour bar is replaced by the player-nemesis restrictions.</div>
+
+<div class="card" id="card2">
+  <header class="kt-head">
+    <div class="name">
+      <h1>Screamer-Killer</h1>
+      <div class="moniker">‘The Deathdirge of Varl’</div>
+    </div>
+    <div class="pic placeholder"></div>
+    <div class="stats">
+      <div class="stat"><div class="k small">Control</div><div class="v"><svg><use href="#i-control"/></svg>6</div></div>
+      <div class="stat"><div class="k">Move</div><div class="v"><svg><use href="#i-move"/></svg>6"</div></div>
+      <div class="stat"><div class="k">Save</div><div class="v"><svg><use href="#i-save"/></svg>4<span class="plus">+</span></div></div>
+      <div class="stat"><div class="k">Wounds</div><div class="v"><svg><use href="#i-wounds"/></svg>75</div></div>
+    </div>
+  </header>
+
+  <div class="kt-body" style="padding-top:14px">
+    <div class="actbar">Behaviour: Battler <span>NPO</span></div>
+    <div class="abil" style="padding-top:0; flex:0 0 auto">
+      <div class="ab">
+        <p class="eff">Moves towards the enemy to fight them, seeking cover on its way, and shoots if the need arises. When activated, it’s given an <b>Engage</b> order if it’s a NEMESIS NPO or will perform the <b>Fight</b>, <b>Charge</b> or <b>Shoot</b> action; otherwise a <b>Conceal</b> order.</p>
+        <p class="res">Performs the first action it can from this list. If it can do none, it’s expended.</p>
+      </div>
+      <ol class="prio">
+        <li><b>Fight.</b></li>
+        <li><b>Charge</b> the closest player operative via the shortest possible route.</li>
+        <li><b>Reposition</b> towards the closest player operative, to cover if possible (a subsequent Dash can fulfil this).</li>
+        <li><b>Shoot.</b></li>
+        <li><b>Dash</b> towards the closest player operative, to cover if possible.</li>
+      </ol>
+    </div>
+
+    <div class="abil" style="border-top:3px solid var(--faction); margin-top:10px; padding-top:10px">
+      <div class="ab">
+        <p><b>Extra Defence:</b> Whenever an operative is shooting this operative, collect and roll one additional defence dice, unless this operative is injured.</p>
+        <p><b>Bulky:</b></p>
+        <ul>
+          <li>Cannot be placed on Vantage terrain higher than 2" from the killzone floor.</li>
+          <li>When it performs the Fight action, its control range can be 1" horizontally and 4" vertically until the end of that action.</li>
+          <li>Can move through other operatives (excluding NEMESIS). Ignore all changes to its APL.</li>
+        </ul>
+      </div>
+      <div class="ab">
+        <p><b>Towering Size:</b></p>
+        <ul>
+          <li>In the Firefight phase, it cannot be given a Conceal order.</li>
+          <li>Cannot be in cover or obscured by Light terrain, terrain parts less than 3" tall, or terrain that’s not wholly intervening.</li>
+          <li>Can be selected as a valid target while within control range of friendly operatives.</li>
+          <li>Moves through terrain parts less than 2" tall; cannot move through Accessible terrain (excl. hatchways) unless it’s also less than 2" tall. Terrain less than 2" tall where it finishes a move is temporarily removed.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="kt-foot">
+    <div class="kw"><span class="fk">Tyranid</span>, Nemesis, Screamer-Killer</div>
+    <div class="sz">NPO · Size: Large</div>
+    <div class="pg">2/2</div>
+    <div class="base">90</div>
+  </footer>
+</div>
+
+</body>
+</html>

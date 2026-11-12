@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nemesis Builder Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Roboto+Condensed:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="card.css">
+<style>
+  :root {
+    --bg: #18181a; --panel: #222225; --panel-2: #2b2b2f; --line: #3a3a40;
+    --text: #ececec; --muted: #9a9aa2; --accent: #e8641c; --ok: #4caf7a; --warn: #e0b23a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 "Roboto Condensed", sans-serif; }
+  .topbar { height: 60px; display: flex; align-items: center; gap: 14px; padding: 0 20px; background: #111; border-bottom: 3px solid var(--accent); }
+  .brand { font-family: Oswald, sans-serif; font-size: 22px; letter-spacing: .06em; text-transform: uppercase; }
+  .brand span { color: var(--accent); }
+  .spacer { flex: 1; }
+  .btn { font: 500 14px Oswald, sans-serif; letter-spacing: .06em; text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); border-radius: 6px; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .layout { display: grid; grid-template-columns: 470px 1fr; height: calc(100vh - 60px); }
+  .form { overflow: auto; border-right: 1px solid var(--line); background: var(--panel); padding: 14px 16px 40px; }
+  .step { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; background: var(--panel-2); }
+  .step h2 { margin: 0; padding: 9px 12px; font: 500 16px Oswald, sans-serif; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); }
+  .step h2 .no { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; font-size: 13px; }
+  .step h2 .state { margin-left: auto; font-size: 12px; color: var(--ok); }
+  .step h2 .state.warn { color: var(--warn); }
+  .step .inner { padding: 10px 12px; display: grid; gap: 10px; }
+  label.f { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  input[type=text], select { width: 100%; padding: 7px 9px; background: #1a1a1d; color: var(--text); border: 1px solid var(--line); border-radius: 5px; font: 15px "Roboto Condensed", sans-serif; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .seg div { flex: 1; text-align: center; padding: 7px 4px; font: 500 14px Oswald, sans-serif; letter-spacing: .05em; border-left: 1px solid var(--line); }
+  .seg div:first-child { border-left: 0; }
+  .seg .on { background: var(--accent); color: #fff; }
+  .seg small { display: block; font: 12px "Roboto Condensed"; opacity: .8; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .chip.dis { opacity: .35; }
+  .drop { border: 2px dashed var(--line); border-radius: 8px; padding: 12px; display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: center; color: var(--muted); font-size: 13px; }
+  .thumb { width: 90px; height: 110px; border-radius: 6px; background: linear-gradient(160deg,#3a3a3a,#1f1f1f); }
+  .meter { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .meter .bar { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .meter .bar i { height: 10px; border-radius: 3px; background: #444; }
+  .meter .bar i.on { background: var(--accent); }
+  .wpn { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 6px; align-items: center; padding: 8px; background: #1f1f22; border-radius: 6px; border: 1px solid var(--line); }
+  .wpn .cost { font: 500 12px Oswald; padding: 2px 7px; border-radius: 4px; background: #444; }
+  .wpn .x { color: var(--muted); padding: 0 4px; }
+  .wpn .sub { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
+  .note { font-size: 12.5px; color: var(--muted); }
+  .warnbox { border-left: 3px solid var(--warn); padding: 6px 10px; background: #2d2818; font-size: 13px; }
+  .okbox { border-left: 3px solid var(--ok); padding: 6px 10px; background: #18291f; font-size: 13px; }
+  .preview { overflow: auto; padding: 18px 26px; background:
+      radial-gradient(circle at 50% 0, #2e2e33, #18181a 70%); }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; align-items: center; }
+  .tab { padding: 6px 14px; border-radius: 6px 6px 0 0; font: 500 14px Oswald; letter-spacing: .05em; text-transform: uppercase; border-bottom: 3px solid transparent; color: var(--muted); }
+  .tab.on { color: #fff; border-color: var(--accent); }
+  .zoom { margin-left: auto; color: var(--muted); font-size: 13px; }
+  .scaler { transform: scale(.76); transform-origin: top left; width: calc(1200px * .76); height: calc(700px * .76); }
+  .exportbar { margin-top: 18px; display: flex; gap: 10px; align-items: center; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-control" viewBox="0 0 24 24"><path d="M2 4h20L12 21z"/></symbol>
+  <symbol id="i-move" viewBox="0 0 24 24"><path d="M3 21 15 9l-4-1 11-6-4 11-1-4L5 21z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M3 3h18v9c0 5-4 8-9 10-5-2-9-5-9-10z"/></symbol>
+  <symbol id="i-wounds" viewBox="0 0 24 24"><path d="M12 1c2 6 5 11 5 15a5 5 0 0 1-10 0c0-4 3-9 5-15z"/></symbol>
+  <symbol id="i-ranged" viewBox="0 0 34 22"><rect x="1" y="7" width="8" height="14" rx="4"/><rect x="13" y="7" width="8" height="14" rx="4"/><rect x="25" y="7" width="8" height="14" rx="4"/></symbol>
+  <symbol id="i-melee" viewBox="0 0 34 22"><path d="M1 9h21v4H1z"/><path d="M22 7h4v8h-4z"/><path d="M26 10h7v2h-7z"/></symbol>
+</svg>
+
+<div class="topbar">
+  <div class="brand">Nemesis <span>Datacard</span> Maker</div>
+  <div class="spacer"></div>
+  <button class="btn">New</button>
+  <button class="btn">Import PDF / PNG / JSON</button>
+  <button class="btn">Save JSON</button>
+  <button class="btn primary">Export PNG</button>
+  <button class="btn primary">Export PDF</button>
+</div>
+
+<div class="layout">
+  <!-- ================= FORM ================= -->
+  <div class="form">
+
+    <div class="step">
+      <h2><span class="no">1</span>Operative <span class="state">✓</span></h2>
+      <div class="inner">
+        <div class="seg"><div>Player operative</div><div class="on">NPO</div></div>
+        <div class="row">
+          <label class="f">Operative name (model)<input type="text" value="Screamer-Killer"></label>
+          <label class="f">Moniker / call sign (optional)<input type="text" value="The Deathdirge of Varl"></label>
+        </div>
+        <label class="f">Name keyword (auto from name, editable)<input type="text" value="SCREAMER-KILLER"></label>
+        <div class="drop">
+          <div class="thumb"></div>
+          <div><b style="color:#ddd">Model picture</b><br>Drop an image or click to upload (JPG/PNG/WebP).<br>Drag to position · zoom slider · Remove</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="no">2</span>Allegiance <span class="state">✓</span></h2>
+      <div class="inner">
+        <div class="chips">
+          <span class="chip">Aeldari</span><span class="chip">Chaos</span><span class="chip">Imperium</span><span class="chip">Leagues of Votann</span>
+          <span class="chip">Necron</span><span class="chip">Ork</span><span class="chip">T'au Empire</span><span class="chip on">Tyranid</span>
+        </div>
+        <div class="note">Allegiance trait: <b style="color:#ddd">Will of the Hive Mind</b>. Adds keyword TYRANID.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="no">3</span>Size &amp; base <span class="state">✓</span></h2>
+      <div class="inner">
+        <div class="seg">
+          <div>Small<small>C4 · 6" · 4+ · W35 · 2 wpn</small></div>
+          <div>Medium<small>C5 · 6" · 4+ · W50 · 2 wpn</small></div>
+          <div class="on">Large<small>C6 · 6" · 4+ · W75 · 3 wpn</small></div>
+        </div>
+        <div class="row">
+          <label class="f">Base size<select><option>90mm round</option></select></label>
+          <label class="f">Custom (mm)<input type="text" placeholder="e.g. 105x70 oval"></label>
+        </div>
+        <div class="warnbox">Bases of 100mm or more can be awkward in close-quarters killzones (e.g. Tomb World).</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="no">4</span>Behaviour <small style="font:12px 'Roboto Condensed';color:#9a9aa2;text-transform:none">NPO only</small><span class="state">✓</span></h2>
+      <div class="inner">
+        <div class="chips"><span class="chip">Brawler</span><span class="chip on">Battler</span><span class="chip">Guardian</span><span class="chip">Marksman</span></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="no">5</span>Weapons <span class="state">3 / 3</span></h2>
+      <div class="inner">
+        <div class="meter">Selections <div class="bar"><i class="on"></i><i class="on"></i><i class="on"></i></div> 3 of 3 used</div>
+
+        <div class="wpn">
+          <select><option>Plasma cannon</option></select>
+          <input type="text" value="Bio-plasmic scream" placeholder="Alias (optional)">
+          <span class="cost">1</span><span class="x">✕</span>
+          <div class="sub">Ranged · two profiles (standard / supercharge) · Blast 2", Heavy (Reposition only), Piercing 1</div>
+        </div>
+        <div class="wpn">
+          <select><option>Scything talons</option></select>
+          <input type="text" placeholder="Alias (optional)">
+          <span class="cost">1</span><span class="x">✕</span>
+          <div class="sub">Melee · 5 / 3+ / 4/6 · Ceaseless · alt: Macro-scalpels</div>
+        </div>
+        <div class="wpn">
+          <select><option>Paired weapon</option></select>
+          <select><option>→ Scything talons</option></select>
+          <span class="cost">1</span><span class="x">✕</span>
+          <div class="sub">Modifier: +1 Atk to the selected melee weapon. Shown as “Paired scything talons”.</div>
+        </div>
+        <button class="btn" style="justify-self:start">+ Add weapon</button>
+        <div class="note">Selection 2 weapons use two slots and Close combat weapon uses none. Each unused slot adds +1 nemesis trait.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="no">6</span>Nemesis traits <span class="state">1 / 1</span></h2>
+      <div class="inner">
+        <div class="note">1 base + 0 from unused weapon selections.</div>
+        <div class="chips">
+          <span class="chip dis">Armoured</span><span class="chip dis">Blitz</span><span class="chip dis">Duellist</span><span class="chip dis">Focused Targeting</span>
+          <span class="chip dis">Close-range Lethality</span><span class="chip on">Fury</span><span class="chip dis">Implacable</span><span class="chip dis">Crushing Impact</span>
+          <span class="chip dis">Shielded</span><span class="chip dis">Shrouded</span><span class="chip dis">Tenacious</span><span class="chip dis">Tough</span><span class="chip dis">Violent Demise</span>
+        </div>
+        <div class="okbox">Fury applied: melee Ceaseless → Relentless, ranged Hit 3+ → 4+.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= PREVIEW ================= -->
+  <div class="preview">
+    <div class="tabs">
+      <div class="tab on">Card 1 · Datacard</div>
+      <div class="tab">Card 2 · Rules</div>
+      <div class="tab">Both (print sheet)</div>
+      <div class="zoom">Fit ▾ · 76%</div>
+    </div>
+
+    <div class="scaler">
+<div class="card" >
+  <header class="kt-head">
+    <div class="name">
+      <h1>Screamer-Killer</h1>
+      <div class="moniker">‘The Deathdirge of Varl’</div>
+    </div>
+    <div class="pic placeholder"></div>
+    <div class="stats">
+      <div class="stat"><div class="k small">Control</div><div class="v"><svg><use href="#i-control"/></svg>6</div></div>
+      <div class="stat"><div class="k">Move</div><div class="v"><svg><use href="#i-move"/></svg>6"</div></div>
+      <div class="stat"><div class="k">Save</div><div class="v"><svg><use href="#i-save"/></svg>4<span class="plus">+</span></div></div>
+      <div class="stat"><div class="k">Wounds</div><div class="v"><svg><use href="#i-wounds"/></svg>75</div></div>
+    </div>
+  </header>
+
+  <div class="kt-body">
+    <table class="weapons">
+      <thead><tr><th></th><th>Name</th><th class="c">Atk</th><th class="c">Hit</th><th class="c">Dmg</th><th>WR</th></tr></thead>
+      <tbody>
+        <tr><td class="ico"><svg><use href="#i-ranged"/></svg></td><td class="n">Bio-plasmic scream (standard)</td>
+            <td class="c">4</td><td class="c"><span class="mod">4+</span></td><td class="c">4/6</td><td class="wr">Blast 2", Heavy (Reposition only), Piercing 1</td></tr>
+        <tr><td class="ico"><svg><use href="#i-ranged"/></svg></td><td class="n">Bio-plasmic scream (supercharge)</td>
+            <td class="c">4</td><td class="c"><span class="mod">4+</span></td><td class="c">5/6</td><td class="wr">Blast 2", Heavy (Reposition only), Hot, Lethal 5+, Piercing 1</td></tr>
+        <tr><td class="ico"><svg><use href="#i-melee"/></svg></td><td class="n">Paired scything talons</td>
+            <td class="c"><span class="mod">6</span></td><td class="c">3+</td><td class="c">4/6</td><td class="wr"><span class="mod">Relentless</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="abil">
+      <div class="ab">
+        <p><b>Will of the Hive Mind:</b> Ignore changes to this operative’s stats from being injured (including its weapons’ stats).</p>
+        <p><b>Fury:</b> This operative’s melee weapons have the Ceaseless weapon rule; if the weapon already has that weapon rule, it has the Relentless weapon rule. Worsen the Hit stat of this operative’s ranged weapons by 1.</p>
+      </div>
+      <div class="ab">
+        <p><b>Nemesis:</b> Extra Defence, Bulky, Towering Size <i>(see other card)</i>.</p>
+        <p><b>Control:</b> Use this operative’s CONTROL stat instead of APL in all instances except spending action points.</p>
+        <p><b>Behaviour:</b> Battler <i>(see other card)</i>.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="kt-foot">
+    <div class="kw"><span class="fk">Tyranid</span>, Nemesis, Screamer-Killer</div>
+    <div class="sz">NPO · Size: Large</div>
+    <div class="pg">1/2</div>
+    <div class="base">90</div>
+  </footer>
+</div>
+    </div>
+
+    <div class="exportbar">
+      <span class="okbox">All steps valid · ready to export</span><label style="display:flex;gap:6px;align-items:center"><input type="checkbox" checked> Highlight calculated values (preview only)</label>
+      <span>Exports embed your build data, so you can re-import the PDF or PNG later to keep editing.</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

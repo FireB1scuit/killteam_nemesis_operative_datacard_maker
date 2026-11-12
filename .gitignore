@@ -1,0 +1,13 @@
+# Copyrighted reference material (rulebooks, dossiers) - never commit
+/reference/
+
+# Dependencies & build output
+node_modules/
+dist/
+coverage/
+*.local
+.vite/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
