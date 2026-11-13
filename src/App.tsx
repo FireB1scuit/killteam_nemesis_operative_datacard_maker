@@ -15,6 +15,7 @@ import { downloadBlob, downloadJson, fileBaseName } from "./io/download";
 import { exportPdf, exportPng, type PngWhich } from "./io/exportCards";
 import type { Paper, PdfLayout } from "./io/pdf";
 import { importFile } from "./io/importFile";
+import { looksLikeImage, processImageFile } from "./io/image";
 import { weaponRuleReference } from "./model/weaponRules";
 import { defaultPaper, newBuild, rememberPaper, rememberWeaponRulesOnPdf, withDefaultOptions } from "./editor/prefs";
 import { weaponRulesOnPdf } from "./model/schema";
@@ -77,13 +78,27 @@ function Editor() {
 
   const runImport = async (file?: File | null) => {
     if (!file) return;
+    let b: NemesisBuild;
     try {
-      const b = await importFile(file);
-      if (!confirmDiscard()) return;
-      load(b, `Loaded “${b.name || "operative"}” from ${file.name}.`);
+      b = await importFile(file);
     } catch (e) {
+      // A normal photo (e.g. picked or taken via iOS's "Photo Library / Take Photo" on this button)
+      // has no build data: use it as the model picture instead of failing.
+      if (looksLikeImage(file)) {
+        try {
+          const dataUrl = await processImageFile(file);
+          dispatch({ type: "patch", patch: { image: { dataUrl, x: 50, y: 50, zoom: 1 } } });
+          setToast({ kind: "ok", text: "Set as the model picture. Drag it in the Model picture box to position it." });
+          return;
+        } catch {
+          /* fall through to the import error */
+        }
+      }
       setToast({ kind: "error", text: e instanceof Error ? e.message : String(e) });
+      return;
     }
+    if (!confirmDiscard()) return;
+    load(b, `Loaded “${b.name || "operative"}” from ${file.name}.`);
   };
 
   const runExport = async (fn: () => Promise<void>) => {

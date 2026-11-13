@@ -1,6 +1,12 @@
 export const MAX_IMAGE_EDGE = 1600;
 export const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif"];
 
+/** iOS sometimes reports an empty MIME type, so fall back to the file extension. */
+export function looksLikeImage(file: File): boolean {
+  if (file.type) return file.type.startsWith("image/");
+  return /\.(jpe?g|png|webp|gif|avif|heic|heif)$/i.test(file.name);
+}
+
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -24,7 +30,7 @@ function readAsDataUrl(file: Blob): Promise<string> {
  * (WebP at 0.85, JPEG fallback) so saved builds and exports stay small.
  */
 export async function processImageFile(file: File): Promise<string> {
-  if (!file.type.startsWith("image/")) throw new Error("Please choose an image file (JPG, PNG or WebP).");
+  if (!looksLikeImage(file)) throw new Error("Please choose an image file (JPG, PNG or WebP).");
   const url = URL.createObjectURL(file);
   try {
     const img = await loadImage(url);
