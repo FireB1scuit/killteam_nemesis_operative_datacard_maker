@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import type { BuildImage } from "../model/schema";
 import { processImageFile } from "../io/image";
+import { CameraDialog, canUseLiveCamera, prefersNativeCamera } from "./CameraDialog";
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -10,6 +11,11 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
  */
 export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange: (img: BuildImage | undefined) => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const captureRef = useRef<HTMLInputElement>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const native = prefersNativeCamera();
+  const hasCamera = native || canUseLiveCamera();
+  const openCamera = () => (native ? captureRef.current?.click() : setCameraOpen(true));
   const drag = useRef<{ x: number; y: number; ix: number; iy: number } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
@@ -128,7 +134,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
       </div>
       <div className="drop-side">
         <b>Model picture</b>
-        {!image && <span>Drop an image here, paste, or click to upload (JPG/PNG/WebP). It's resized to 1600 px.</span>}
+        {!image && <span>Drop an image here, paste, click to upload (JPG/PNG/WebP){hasCamera ? " or take a photo" : ""}. It's resized to 1600 px.</span>}
         {image && (
           <>
             <span>Drag to position · scroll or slider to zoom.</span>
@@ -143,6 +149,9 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
           <button type="button" className="btn small" onClick={() => fileRef.current?.click()} disabled={busy}>
             {image ? "Replace" : "Upload"}
           </button>
+          {hasCamera && (
+            <button type="button" className="btn small" onClick={openCamera} disabled={busy}>Take photo</button>
+          )}
           {image && (
             <>
               <button type="button" className="btn small" onClick={() => update({ x: 50, y: 50, zoom: 1 })}>Reset</button>
@@ -156,6 +165,12 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
             void accept(e.target.files?.[0]);
             e.target.value = "";
           }} />
+        <input ref={captureRef} type="file" accept="image/*" capture="environment" hidden
+          onChange={(e) => {
+            void accept(e.target.files?.[0]);
+            e.target.value = "";
+          }} />
+        {cameraOpen && <CameraDialog onCapture={(f) => void accept(f)} onClose={() => setCameraOpen(false)} />}
       </div>
     </div>
   );
