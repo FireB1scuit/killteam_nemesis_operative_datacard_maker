@@ -24,7 +24,7 @@ The preview shows the **final** weapon values (Twinned, Paired, Fury and Waaagh!
 highlighted in orange in the preview. Steps show ✓ / ! / ✕, and exporting an invalid build asks for confirmation.
 
 **Top bar**: New · Example (the four Dossier examples) · Import PDF / PNG / JSON (or drag a file onto the
-page) · Save JSON · Export PNG (card 1, card 2, or both side by side; 3600 × 2100 px per card) ·
+page) · Save JSON · Export PNG (card 1, card 2, both side by side, or both below each other; 3600 × 2100 px per card) ·
 **Weapon rules on PDF** switch · Export PDF.
 
 ### Weapon rules on PDF

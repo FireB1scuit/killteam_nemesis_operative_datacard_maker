@@ -102,10 +102,10 @@ function Editor() {
   const doPng = (which: PngWhich) =>
     runExport(async () => {
       const s = stage.current;
-      const node = which === "1" ? s?.card1 : which === "2" ? s?.card2 : s?.both;
+      const node = which === "1" ? s?.card1 : which === "2" ? s?.card2 : which === "stacked" ? s?.stacked : s?.both;
       if (!node) throw new Error("Cards not ready");
       const blob = await exportPng(node, build);
-      const suffix = which === "both" ? "" : `-card${which}`;
+      const suffix = which === "both" ? "" : which === "stacked" ? "-stacked" : `-card${which}`;
       downloadBlob(blob, `${fileBaseName(build)}${suffix}.png`);
       setToast({ kind: "ok", text: "PNG exported. It contains your build: import it later to keep editing." });
     });
@@ -190,6 +190,7 @@ function Editor() {
               <button type="button" className="btn" onClick={() => { close(); void doPng("1"); }}>Card 1 · Datacard</button>
               <button type="button" className="btn" onClick={() => { close(); void doPng("2"); }}>Card 2 · Rules</button>
               <button type="button" className="btn" onClick={() => { close(); void doPng("both"); }}>Both side by side</button>
+              <button type="button" className="btn" onClick={() => { close(); void doPng("stacked"); }}>Both below each other</button>
               <hr />
               <label className="opt"><input type="checkbox" checked={exportHighlight} onChange={(e) => setExportHighlight(e.target.checked)} /> Highlight calculated values</label>
               <span className="note">3600 × 2100 px per card. Your build is embedded in the file.</span>

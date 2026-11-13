@@ -6,7 +6,7 @@ import type { Paper, PdfFonts, PdfLayout } from "./pdf";
 import { writePngText } from "./pngText";
 import { renderToPng } from "./renderCard";
 
-export type PngWhich = "1" | "2" | "both";
+export type PngWhich = "1" | "2" | "both" | "stacked";
 
 /** Serialise the build for embedding (stamped with the app version that exported it). */
 export function buildToJson(build: NemesisBuild): string {
