@@ -3,7 +3,7 @@ import Gallery from "./Gallery";
 import { CONFIG } from "./config";
 import { deriveCard } from "./model/derive";
 import { EXAMPLES, exampleBuild } from "./model/examples";
-import { emptyBuild, type NemesisBuild } from "./model/schema";
+import type { NemesisBuild } from "./model/schema";
 import { isValid, validate } from "./model/validate";
 import { useBuildStore } from "./editor/state";
 import { StepAllegiance, StepBehaviour, StepOperative, StepSize, StepTraits } from "./editor/Steps";
@@ -13,20 +13,26 @@ import { ExportStage, type ExportNodes } from "./editor/ExportStage";
 import { Menu } from "./editor/Menu";
 import { downloadBlob, downloadJson, fileBaseName } from "./io/download";
 import { exportPdf, exportPng, type PngWhich } from "./io/exportCards";
-import type { PdfLayout } from "./io/pdf";
+import type { Paper, PdfLayout } from "./io/pdf";
 import { importFile } from "./io/importFile";
+import { weaponRuleReference } from "./model/weaponRules";
+import { defaultPaper, newBuild, rememberPaper, rememberWeaponRulesOnPdf, withDefaultOptions } from "./editor/prefs";
+import { weaponRulesOnPdf } from "./model/schema";
 import "./app.css";
 
-const CARD_PAGES: { id: PdfLayout; label: string } = {
-  id: "cards",
-  label: `Two separate cards (${CONFIG.cardWidthMm} × ${CONFIG.cardHeightMm} mm pages)`,
+const CARD_SIZE = `${CONFIG.cardWidthMm} × ${CONFIG.cardHeightMm} mm`;
+/** Export PDF menu entries; the first entry of each list is the default (plan.md §8.7, §8.8). */
+const PDF_LAYOUTS: Record<"on" | "off", { id: PdfLayout; label: string; paper: boolean }[]> = {
+  on: [
+    { id: "rules", label: "Cards + weapon rules (one page)", paper: true },
+    { id: "rules-duplex", label: "Double-sided: card 1 + weapon rules front, card 2 back", paper: true },
+  ],
+  off: [
+    { id: "cards", label: `Two separate cards (${CARD_SIZE} pages)`, paper: false },
+    { id: "duplex", label: "Double-sided: card 1 front, card 2 back", paper: true },
+    { id: "sheet", label: "Print sheet with cut marks", paper: true },
+  ],
 };
-const SHEETS: { id: PdfLayout; label: string }[] = [
-  { id: "sheet-a4", label: "A4 sheet with cut marks" },
-  { id: "sheet-letter", label: "Letter sheet with cut marks" },
-];
-/** Export PDF menu, with the configured default layout (CONFIG.defaultPdfLayout) first. */
-const PDF_LAYOUTS = CONFIG.defaultPaper === "a4" ? [CARD_PAGES, ...SHEETS] : [...SHEETS, CARD_PAGES];
 
 type Toast = { kind: "ok" | "error"; text: string } | null;
 
@@ -38,6 +44,13 @@ function Editor() {
   const [highlight, setHighlight] = useState<boolean>(CONFIG.highlightInPreview);
   const [exportHighlight, setExportHighlight] = useState<boolean>(CONFIG.highlightInExport);
   const [busy, setBusy] = useState(false);
+  const [paper, setPaper] = useState<Paper>(defaultPaper);
+  const rulesOn = weaponRulesOnPdf(build);
+  const ruleRef = useMemo(() => weaponRuleReference(card), [card]);
+  const setRulesOn = (on: boolean) => {
+    dispatch({ type: "patch", patch: { options: { ...build.options, weaponRulesOnPdf: on } } });
+    rememberWeaponRulesOnPdf(on);
+  };
   const [toast, setToast] = useState<Toast>(null);
   const [dragging, setDragging] = useState(false);
   const stage = useRef<ExportNodes>(null);
@@ -101,7 +114,7 @@ function Editor() {
     runExport(async () => {
       const s = stage.current;
       if (!s?.card1 || !s.card2) throw new Error("Cards not ready");
-      const blob = await exportPdf([s.card1, s.card2], build, layout);
+      const blob = await exportPdf([s.card1, s.card2], build, layout, paper);
       downloadBlob(blob, `${fileBaseName(build)}.pdf`);
       setToast({ kind: "ok", text: "PDF exported. Print at 100% / actual size. It contains your build for re-import." });
     });
@@ -150,12 +163,12 @@ function Editor() {
       <header className="topbar">
         <div className="brand">Nemesis <span>Datacard</span> Maker</div>
         <div className="spacer" />
-        <button type="button" className="btn" onClick={() => confirmDiscard() && load(emptyBuild())}>New</button>
+        <button type="button" className="btn" onClick={() => confirmDiscard() && load(newBuild())}>New</button>
         <label className="btn select-btn">
           <span>Example</span>
           <select value="" aria-label="Load an example from the Dossier" onChange={(e) => {
             const id = e.target.value;
-            if (id && confirmDiscard()) load(exampleBuild(id));
+            if (id && confirmDiscard()) load(withDefaultOptions(exampleBuild(id)));
           }}>
             <option value="">Load example…</option>
             {EXAMPLES.map((ex) => <option key={ex.id} value={ex.id}>{ex.label}</option>)}
@@ -183,15 +196,37 @@ function Editor() {
             </>
           )}
         </Menu>
+        <button
+          type="button"
+          className="toggle"
+          role="switch"
+          aria-checked={rulesOn}
+          title="Add the weapon rules used on the cards below them on the PDF (Kill Team Lite Rules text, alphabetical). Your choice is saved with the build and remembered for new builds."
+          onClick={() => setRulesOn(!rulesOn)}
+        >
+          <span className="sw" aria-hidden />
+          Weapon rules on PDF <span className="st">{rulesOn ? "On" : "Off"}</span>
+        </button>
         <Menu label={busy ? "Exporting…" : "Export PDF"} primary disabled={busy}>
           {(close) => (
             <>
-              {PDF_LAYOUTS.map((l) => (
-                <button key={l.id} type="button" className="btn" onClick={() => { close(); void doPdf(l.id); }}>{l.label}</button>
+              <span className="head">{rulesOn ? "With weapon rules" : "Cards only"}</span>
+              {PDF_LAYOUTS[rulesOn ? "on" : "off"].map((l, i) => (
+                <button key={l.id} type="button" className="btn" onClick={() => { close(); void doPdf(l.id); }}>
+                  {l.label}{l.paper ? ` · ${paper === "a4" ? "A4" : "Letter"}` : ""}{i === 0 ? " (default)" : ""}
+                </button>
               ))}
+              <div className="seg-mini" role="group" aria-label="Paper size">
+                Paper:
+                {(["a4", "letter"] as const).map((p) => (
+                  <button key={p} type="button" aria-pressed={paper === p} onClick={() => { setPaper(p); rememberPaper(p); }}>
+                    {p === "a4" ? "A4" : "Letter"}
+                  </button>
+                ))}
+              </div>
               <hr />
               <label className="opt"><input type="checkbox" checked={exportHighlight} onChange={(e) => setExportHighlight(e.target.checked)} /> Highlight calculated values</label>
-              <span className="note">Print at 100% (actual size). Your build is attached to the PDF.</span>
+              <span className="note">Cards print at {CARD_SIZE}. Print at 100% (actual size). Your build is attached to the PDF.</span>
             </>
           )}
         </Menu>
@@ -205,7 +240,7 @@ function Editor() {
               {EXAMPLES.map((ex, i) => (
                 <span key={ex.id}>
                   {i > 0 && " · "}
-                  <button type="button" className="linkbtn" onClick={() => load(exampleBuild(ex.id))}>{ex.label.split(" ‘")[0]}</button>
+                  <button type="button" className="linkbtn" onClick={() => load(withDefaultOptions(exampleBuild(ex.id)))}>{ex.label.split(" ‘")[0]}</button>
                 </span>
               ))}
             </div>
@@ -231,6 +266,13 @@ function Editor() {
               Highlight calculated values (preview only)
             </label>
             <span className="longnote">Exports embed your build data, so you can re-import the PDF or PNG later to keep editing.</span>
+            <span className="pdfline" role="status">
+              {rulesOn
+                ? ruleRef.length
+                  ? <>PDF will include {ruleRef.length} weapon rule{ruleRef.length > 1 ? "s" : ""}: {ruleRef.map((e, i) => <span key={e.term}>{i > 0 && ", "}<abbr title={e.text}>{e.term}</abbr></span>)}.</>
+                  : "PDF will include the weapon rules reference (no weapon rules on these cards yet)."
+                : "Weapon rules not included in the PDF."}
+            </span>
             {dirty && <span className="muted">· Unsaved changes (autosaved in this browser)</span>}
           </div>
         </section>
@@ -238,7 +280,7 @@ function Editor() {
 
       <footer className="disclaimer">
         Fan-made tool, not affiliated with or endorsed by Games Workshop. Kill Team and Warhammer are trademarks of Games
-        Workshop Ltd. Rules text is reproduced from the Nemesis Operatives Dossier for personal, non-commercial use.
+        Workshop Ltd. Rules text is reproduced from the Nemesis Operatives Dossier and the Kill Team Lite Rules for personal, non-commercial use.
       </footer>
 
       <ExportStage ref={stage} model={card} image={build.image} highlight={exportHighlight} />

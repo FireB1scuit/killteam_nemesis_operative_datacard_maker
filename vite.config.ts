@@ -11,6 +11,8 @@ const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), 
 export default defineConfig(({ command, isPreview }) => ({
   base: process.env.VITE_BASE ?? (command === "build" || isPreview ? `/${REPO}/` : "/"),
   plugins: [react()],
+  // The pdf chunk (pdf-lib + fontkit, ~1 MB) is only loaded when the user exports or imports a PDF.
+  build: { chunkSizeWarningLimit: 1200 },
   server: { watch: { ignored: ["**/reference/**", "**/docs/**"] } },
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   test: {

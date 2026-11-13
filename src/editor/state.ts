@@ -3,8 +3,9 @@ import { SIZES, type SizeId } from "../data/sizes";
 import type { TraitId } from "../data/traits";
 import { WEAPON_BY_ID } from "../data/weapons";
 import { migrateBuild } from "../model/migrate";
+import { newBuild, withDefaultOptions } from "./prefs";
 import { EXAMPLES, exampleBuild } from "../model/examples";
-import { emptyBuild, keywordFromName, newPickId, type NemesisBuild, type WeaponPick } from "../model/schema";
+import { keywordFromName, newPickId, type NemesisBuild, type WeaponPick } from "../model/schema";
 
 export type Action =
   | { type: "patch"; patch: Partial<NemesisBuild> }
@@ -105,7 +106,7 @@ function writeStorage(key: string, value: string) {
 function loadAutosave(): NemesisBuild {
   // ?example=<id> opens one of the Dossier examples (handy for sharing and screenshots).
   const ex = new URLSearchParams(window.location.search).get("example");
-  if (ex && EXAMPLES.some((e) => e.id === ex)) return exampleBuild(ex);
+  if (ex && EXAMPLES.some((e) => e.id === ex)) return withDefaultOptions(exampleBuild(ex));
   const raw = readStorage(AUTOSAVE_KEY);
   if (raw) {
     try {
@@ -114,7 +115,7 @@ function loadAutosave(): NemesisBuild {
       /* ignore broken autosave */
     }
   }
-  return emptyBuild();
+  return newBuild();
 }
 
 const snapshot = (b: NemesisBuild) => JSON.stringify({ ...b, createdWith: "" });
@@ -125,7 +126,7 @@ const snapshot = (b: NemesisBuild) => JSON.stringify({ ...b, createdWith: "" });
  */
 export function useBuildStore() {
   const [build, dispatch] = useReducer(reducer, undefined, loadAutosave);
-  const [savedSnap, setSavedSnap] = useState<string>(() => readStorage(SAVED_KEY) ?? snapshot(emptyBuild()));
+  const [savedSnap, setSavedSnap] = useState<string>(() => readStorage(SAVED_KEY) ?? snapshot(newBuild()));
   const timer = useRef<number | undefined>(undefined);
 
   useEffect(() => {

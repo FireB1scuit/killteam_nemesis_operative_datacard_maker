@@ -27,6 +27,23 @@ describe("App smoke", () => {
     expect(within(card1).getByText("Will of the Hive Mind:")).toBeTruthy();
   });
 
+  it("'Weapon rules on PDF' switch: on by default, saved in the build, remembered for new builds", () => {
+    render(<App />);
+    const sw = screen.getByRole("switch", { name: /Weapon rules on PDF/ });
+    expect(sw.getAttribute("aria-checked")).toBe("true");
+    expect(sw.getAttribute("title")).toMatch(/Lite Rules/);
+    fireEvent.click(screen.getByRole("radio", { name: "Chaos" })); // Let the Galaxy Burn names Balanced
+    expect(document.querySelector(".pdfline")?.textContent).toBe("PDF will include 1 weapon rule: Balanced.");
+    fireEvent.click(sw);
+    expect(sw.getAttribute("aria-checked")).toBe("false");
+    expect(sw.textContent).toMatch(/Off/);
+    expect(screen.getByText("Weapon rules not included in the PDF.")).toBeTruthy();
+    expect(localStorage.getItem("nemesis-datacard:pref:weaponRulesOnPdf")).toBe("0");
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    fireEvent.click(screen.getByRole("button", { name: "New" }));
+    expect(screen.getByRole("switch", { name: /Weapon rules on PDF/ }).getAttribute("aria-checked")).toBe("false");
+  });
+
   it("adds a weapon through the searchable picker using an alternative name", () => {
     const { container } = render(<App />);
     const add = screen.getByRole("combobox", { name: "Add weapon" });

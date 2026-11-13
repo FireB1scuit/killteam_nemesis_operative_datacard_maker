@@ -8,8 +8,22 @@ export function cardOverflows(card: HTMLElement): boolean {
   // multi-column overflow spills sideways into extra columns
   if (abil && abil.scrollWidth > abil.clientWidth + 1) return true;
   if (abil && abil.scrollHeight > abil.clientHeight + 1) return true;
+  // Headroom: the PNG/PDF renderer (SVG foreignObject) can lay text out a pixel or two taller than the live
+  // DOM; with balanced columns that pushes a block into a 3rd column off the card. Keep FIT_SLACK px spare.
+  if (abil && abil.clientHeight > 0) {
+    const box = abil.getBoundingClientRect();
+    const scale = box.width / (abil.offsetWidth || box.width || 1) || 1; // the preview may be CSS-scaled
+    for (const child of Array.from(abil.children)) {
+      const r = child.getBoundingClientRect();
+      if ((r.bottom - box.top) / scale > abil.clientHeight - FIT_SLACK) return true;
+      if ((r.right - box.left) / scale > abil.clientWidth + 2) return true;
+    }
+  }
   return false;
 }
+
+/** Spare px (at 1x) kept below the last ability block. */
+export const FIT_SLACK = 8;
 
 /**
  * Shrink the card body font (--fs) until nothing overflows, down to CONFIG.minFontScale.

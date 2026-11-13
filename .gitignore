@@ -11,3 +11,6 @@ coverage/
 # Editor / OS
 .DS_Store
 Thumbs.db
+
+# Visual-check output (scripts/visual-check.mjs): local only, ~35 MB
+docs/screenshots/

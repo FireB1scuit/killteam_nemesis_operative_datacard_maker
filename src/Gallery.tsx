@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { CardPair } from "./card/CardPair";
-import { renderNodePng } from "./io/exportCards";
+import { exportPdf, renderNodePng } from "./io/exportCards";
+import type { Paper, PdfLayout } from "./io/pdf";
+import { CONFIG } from "./config";
 import { deriveCard } from "./model/derive";
 import { ALL_FIXTURES } from "./model/fixtures";
 
@@ -13,6 +15,9 @@ export default function Gallery({ only }: { only?: string }) {
   const testImage = img?.startsWith("data:image/")
     ? { dataUrl: img, x: Number(q.get("x") ?? 50), y: Number(q.get("y") ?? 50), zoom: Number(q.get("zoom") ?? 1) }
     : undefined;
+  if (q.has("pdf") && list[0]) {
+    return <PdfCheck build={list[0].build} layout={(q.get("pdf") || "rules") as PdfLayout} paper={(q.get("paper") || "a4") as Paper} />;
+  }
   if (q.has("export") && list[0]) return <ExportCheck build={list[0].build} image={testImage ?? list[0].build.image} />;
   return (
     <div style={{ background: "#555", padding: 40, display: "flex", flexDirection: "column", gap: 40, minHeight: "100vh" }}>
@@ -56,6 +61,41 @@ function ExportCheck({ build, image }: { build: (typeof ALL_FIXTURES)[number]["b
       <div id="export-result" data-ready={urls.length ? "1" : "0"} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {urls.map((u) => <img key={u} src={u} alt="" style={{ width: 1200, height: 700 }} />)}
       </div>
+    </div>
+  );
+}
+
+/**
+ * ?gallery=<id>&pdf=<layout>&paper=a4|letter runs the real PDF exporter and writes the file as base64 into
+ * #pdf-b64, so a headless browser (--dump-dom) can save it for a visual check (see README "Checking visuals").
+ */
+function PdfCheck({ build, layout, paper }: { build: (typeof ALL_FIXTURES)[number]["build"]; layout: PdfLayout; paper: Paper }) {
+  const c1 = useRef<HTMLDivElement>(null);
+  const c2 = useRef<HTMLDivElement>(null);
+  const [b64, setB64] = useState<string>();
+  const [err, setErr] = useState<string>();
+  useEffect(() => {
+    const t = window.setTimeout(async () => {
+      try {
+        await document.fonts.ready;
+        const blob = await exportPdf([c1.current!, c2.current!], build, layout, paper);
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        let s = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        setB64(btoa(s));
+      } catch (e) {
+        setErr(String(e));
+      }
+    }, 300);
+    return () => window.clearTimeout(t);
+  }, [build, layout, paper]);
+  return (
+    <div>
+      <div style={{ position: "fixed", left: -20000, top: 0 }}>
+        <CardPair model={deriveCard(build)} image={build.image} accent={CONFIG.accent} card1Ref={c1} card2Ref={c2} />
+      </div>
+      {err && <pre id="pdf-error">{err}</pre>}
+      {b64 && <pre id="pdf-b64">{b64}</pre>}
     </div>
   );
 }

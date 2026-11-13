@@ -32,6 +32,25 @@ button, input, select { font: inherit; color: inherit; }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.primary:hover:not(:disabled) { filter: brightness(1.08); }
 .btn.small { padding: 4px 10px; font-size: 12px; }
+/* "Weapon rules on PDF" switch (docs/mockups/app.html) */
+.toggle {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px; border: 1px solid var(--line); border-radius: 999px;
+  font: 500 13px Oswald, sans-serif; letter-spacing: .05em; text-transform: uppercase; color: var(--text); background: var(--panel-2);
+  cursor: pointer; white-space: nowrap;
+}
+.toggle .sw { width: 34px; height: 18px; border-radius: 999px; background: #55555c; position: relative; flex: none; transition: background .15s; }
+.toggle .sw::after {
+  content: ""; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: left .15s;
+}
+.toggle .st { color: var(--muted); min-width: 2.2em; }
+.toggle[aria-checked="true"] { border-color: var(--accent); background: #2a1d15; }
+.toggle[aria-checked="true"] .sw { background: var(--accent); }
+.toggle[aria-checked="true"] .sw::after { left: 18px; }
+.toggle[aria-checked="true"] .st { color: var(--accent); }
+.menu-pop .seg-mini { display: flex; gap: 6px; align-items: center; font-size: 14px; }
+.menu-pop .seg-mini button { padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--field); cursor: pointer; }
+.menu-pop .seg-mini button[aria-pressed="true"] { border-color: var(--accent); color: #fff; background: #2a1d15; }
+.menu-pop .head { font: 500 12px Oswald, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .select-btn { position: relative; }
 .select-btn select { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .menu { position: relative; }

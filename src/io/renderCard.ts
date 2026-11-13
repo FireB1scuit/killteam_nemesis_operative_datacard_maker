@@ -49,6 +49,8 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 /** Render `node` (a card or the two-card row) to PNG bytes at `pixelRatio`. */
 export async function renderToPng(node: HTMLElement, pixelRatio: number): Promise<Uint8Array> {
   await document.fonts?.ready;
+  // Let the card flow / fitText re-run with the real font metrics before the DOM is captured.
+  for (let i = 0; i < 4; i++) await new Promise((r) => requestAnimationFrame(() => r(undefined)));
   const width = node.offsetWidth;
   const height = node.offsetHeight;
   const fonts = await embeddedFontCss();

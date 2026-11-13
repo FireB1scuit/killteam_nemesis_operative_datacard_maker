@@ -56,7 +56,7 @@ export function CardFooter({ model, page }: { model: CardModel; page: string }) 
         {keywords.allegiance && ", "}
         {keywords.rest.join(", ")}
       </div>
-      <div className="sz">{model.operativeType === "npo" ? "NPO" : "Player"} · {model.sizeLabel}</div>
+      <div className="sz">{model.operativeType === "npo" ? "NPO · " : ""}{model.sizeLabel}</div>
       <div className="pg">{page}</div>
       {base.label && <div className={`base${base.kind === "oval" ? " oval" : longBase ? " long" : ""}`}>{base.label}</div>}
     </footer>

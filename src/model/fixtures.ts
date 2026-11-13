@@ -43,6 +43,21 @@ export const WORST_CASES: { id: string; label: string; build: NemesisBuild }[] =
     },
   },
   {
+    id: "worst-flow",
+    label: "Large NPO, 6 rows + long allegiance + 2 long traits (over budget on purpose: blocks flow to card 2)",
+    build: {
+      ...emptyBuild(), operativeType: "npo", name: "Hammerhead Gunship", moniker: "Shas'vre Longstrike's Echo",
+      nameKeyword: "HAMMERHEAD", allegiance: "LEAGUES_OF_VOTANN", size: "L", base: { kind: "oval", label: "170x105" }, behaviour: "GUARDIAN",
+      weapons: [
+        { id: "a", weaponId: "plasma_cannon", alias: "Ion cannon" },
+        { id: "b", weaponId: "missile_launcher", alias: "Seeker missiles" },
+        { id: "c", weaponId: "close_combat_weapon", alias: "Hull ram" },
+        { id: "d", weaponId: "heavy_flamer" },
+      ],
+      traits: ["CLOSE_RANGE_LETHALITY", "VIOLENT_DEMISE"],
+    },
+  },
+  {
     id: "player",
     label: "Small player operative",
     build: {

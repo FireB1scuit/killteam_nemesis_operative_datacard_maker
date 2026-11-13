@@ -29,7 +29,7 @@ export function Preview(props: { model: CardModel; image?: BuildImage; highlight
   const tabs: { id: PreviewTab; label: string }[] = [
     { id: "1", label: "Card 1 · Datacard" },
     { id: "2", label: "Card 2 · Rules" },
-    { id: "both", label: "Both" },
+    { id: "both", label: "Both (print sheet)" },
   ];
 
   return (

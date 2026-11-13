@@ -1,10 +1,14 @@
 // @vitest-environment node
-import { PDFDocument, PDFName } from "pdf-lib";
+import { PDFDict, PDFDocument, PDFName } from "pdf-lib";
 import { deflateSync } from "node:zlib";
 import { exampleBuild } from "../src/model/examples";
 import { buildToJson } from "../src/io/exportCards";
 import { importBytes } from "../src/io/importFile";
-import { buildPdf, readPdfBuildJson } from "../src/io/pdf";
+import { buildPdf, readPdfBuildJson, type PdfFonts, type PdfLayout } from "../src/io/pdf";
+import { readFileSync } from "node:fs";
+import { deriveCard } from "../src/model/derive";
+import { weaponRuleReference } from "../src/model/weaponRules";
+import { WEAPON_RULE_GLOSSARY } from "../src/data/weaponRules";
 import { readPngText, writePngText } from "../src/io/pngText";
 
 /** A valid 2×1 RGBA PNG built from scratch (signature, IHDR, IDAT, IEND). */
@@ -49,8 +53,17 @@ function tinyPng(): Uint8Array {
   return out;
 }
 
-const withImage = () => {
+const font = (f: string) => new Uint8Array(readFileSync(new URL(`../public/fonts/${f}`, import.meta.url)));
+const FONTS: PdfFonts = {
+  regular: font("roboto-condensed-latin-400-normal.woff"),
+  bold: font("roboto-condensed-latin-700-normal.woff"),
+  heading: font("oswald-latin-500-normal.woff"),
+};
+const strip = (b: object) => ({ ...b, createdWith: "" });
+
+const withImage = (rulesOn = false) => {
   const b = exampleBuild("screamer-killer");
+  b.options = { weaponRulesOnPdf: rulesOn }; // non-default value: proves the option round-trips
   b.image = { dataUrl: "data:image/webp;base64,UklGRhIAAABXRUJQVlA4", x: 40, y: 30, zoom: 1.5 };
   b.moniker = "Thé Deathdirge ‘of’ Varl ★"; // non-ASCII survives
   return b;
@@ -66,11 +79,12 @@ describe("PNG iTXt", () => {
     expect(readPngText(png)).toBeUndefined();
   });
 
-  it("round-trips a build through importBytes", async () => {
-    const b = withImage();
+  it.each([true, false])("round-trips a build through importBytes (weaponRulesOnPdf=%s)", async (on) => {
+    const b = withImage(on);
     const png = writePngText(tinyPng(), buildToJson(b));
     const back = await importBytes("card.png", png);
-    expect({ ...back, createdWith: "" }).toEqual({ ...b, createdWith: "" });
+    expect(strip(back)).toEqual(strip(b));
+    expect(back.options?.weaponRulesOnPdf).toBe(on);
   });
 
   it("rejects a PNG without build data", async () => {
@@ -79,25 +93,55 @@ describe("PNG iTXt", () => {
 });
 
 describe("PDF", () => {
-  it.each(["cards", "sheet-a4", "sheet-letter"] as const)("embeds and reads back the build (%s)", async (layout) => {
-    const b = withImage();
-    const pdf = await buildPdf([tinyPng(), tinyPng()], buildToJson(b), layout, "Test");
+  const layouts: [PdfLayout, "a4" | "letter", number][] = [
+    ["cards", "a4", 2],
+    ["sheet", "a4", 1],
+    ["sheet", "letter", 1],
+    ["duplex", "a4", 2],
+    ["rules", "a4", 1],
+    ["rules", "letter", 1],
+    ["rules-duplex", "a4", 2],
+  ];
+  it.each(layouts)("embeds and reads back the build (%s, %s)", async (layout, paper, pages) => {
+    const b = withImage(layout.startsWith("rules"));
+    const rules = weaponRuleReference(deriveCard(b));
+    const pdf = await buildPdf({ cards: [tinyPng(), tinyPng()], buildJson: buildToJson(b), layout, paper, title: "Test", rules, fonts: FONTS, footerLeft: "Test" });
     const doc = await PDFDocument.load(pdf);
+    expect(doc.getPageCount()).toBe(pages);
+    const { width, height } = doc.getPage(0).getSize();
+    const mm = (pt: number) => pt / (72 / 25.4);
     if (layout === "cards") {
-      expect(doc.getPageCount()).toBe(2);
-      const { width, height } = doc.getPage(0).getSize();
-      expect(width / (72 / 25.4)).toBeCloseTo(120, 3);
-      expect(height / (72 / 25.4)).toBeCloseTo(70, 3);
+      expect(mm(width)).toBeCloseTo(120, 3);
+      expect(mm(height)).toBeCloseTo(70, 3);
     } else {
-      expect(doc.getPageCount()).toBe(1);
+      expect(mm(width)).toBeCloseTo(paper === "a4" ? 210 : 215.9, 1);
+      expect(mm(height)).toBeCloseTo(paper === "a4" ? 297 : 279.4, 1);
     }
     const back = await importBytes("x.pdf", pdf);
-    expect({ ...back, createdWith: "" }).toEqual({ ...b, createdWith: "" });
+    expect(strip(back)).toEqual(strip(b));
+    expect(back.options?.weaponRulesOnPdf).toBe(layout.startsWith("rules"));
+  });
+
+  it("sets the weapon rules as real text with the embedded fonts, continuing on a new page when needed", async () => {
+    const b = exampleBuild("screamer-killer");
+    const all = WEAPON_RULE_GLOSSARY.map(({ term, text, source }) => ({ term, text, source }));
+    const pdf = await buildPdf({ cards: [tinyPng(), tinyPng()], buildJson: buildToJson(b), layout: "rules", paper: "a4", title: "T", rules: all, fonts: FONTS });
+    const doc = await PDFDocument.load(pdf);
+    expect(doc.getPageCount()).toBe(2); // all 22 rules don't fit under two cards
+    const baseFonts = doc.context
+      .enumerateIndirectObjects()
+      .map(([, obj]) => (obj instanceof PDFDict ? obj.get(PDFName.of("BaseFont")) : undefined))
+      .filter(Boolean)
+      .map(String);
+    expect(baseFonts.some((f) => /RobotoCondensed-Regular/.test(f))).toBe(true);
+    expect(baseFonts.some((f) => /RobotoCondensed-Bold/.test(f))).toBe(true);
+    expect(baseFonts.some((f) => /Oswald/.test(f))).toBe(true);
+    await expect(buildPdf({ cards: [tinyPng()], buildJson: "{}", layout: "rules", title: "T", rules: all })).rejects.toThrow(/Fonts/);
   });
 
   it("falls back to the Info key when the attachment is missing", async () => {
     const b = exampleBuild("redemptor-dreadnought");
-    const pdf = await buildPdf([tinyPng()], buildToJson(b), "cards", "Test");
+    const pdf = await buildPdf({ cards: [tinyPng()], buildJson: buildToJson(b), layout: "cards", title: "Test" });
     // Strip the EmbeddedFiles name tree and re-save.
     const doc = await PDFDocument.load(pdf);
     doc.catalog.delete(PDFName.of("Names"));
