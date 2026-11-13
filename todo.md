@@ -33,12 +33,16 @@ Finish with: all tests, lint and build passing; work committed on feat/datacard-
 
 ## Checklist (kept current while working)
 
-- [x] M1 Scaffold: Vite/React/TS, lint, vitest, Pages workflow (done earlier)
-- [x] M2 Rules data + engine: src/data/*.ts read docs/rules-data.json (single source); allegiance prints `cardText`; deriveCard data-driven (Twinned/Paired `apply`, Fury/Waaagh! `applyToProfiles`); golden tests loop over `examples[].expected`; edge cases; legacy-id migration
+- [x] M1 Scaffold: Vite/React/TS, lint, vitest, Pages workflow (lint → test → build → deploy, base = repo name)
+- [x] M2 Rules data + engine: src/data/*.ts read docs/rules-data.json (single source); allegiance prints `cardText`; deriveCard data-driven; golden tests loop over `examples[].expected`; edge cases; legacy-id migration
 - [x] weaponRuleReference(card) + tests against `expected.weaponRuleReference`
-- [ ] M3 Cards: check against docs/mockups/datacard.png; worst cases (Large NPO 4 traits; 3 two-profile weapons)
-- [ ] M4/M5 Editor + picture: verify against app.png; "Weapon rules on PDF" toggle (role=switch, On/Off, tooltip, remembered default) + preview line
-- [ ] M6 Export: PDF page with cards + cut line + WEAPON RULES (pdf-lib + fontkit, real text, 2 columns, continues on page 2); double-sided; cards-only layouts when off; A4/Letter
-- [ ] M7 Import: round trips incl. options.weaponRulesOnPdf
-- [ ] M8 Polish: mobile layout, keyboard, empty states, Load example
-- [ ] M9 Release: README (usage, dev, deploy + Pages "GitHub Actions", settings, judgement calls, disclaimer); screenshots
+- [x] M3 Cards: matches docs/mockups/datacard.png; worst cases checked (4 traits; 3 two-profile weapons; flow to card 2); fitText headroom fix
+- [x] M4/M5 Editor + picture: matches app.png; "Weapon rules on PDF" switch (role=switch, On/Off, tooltip, remembered default) + preview line
+- [x] M6 Export: PDF page with cards + cut line + WEAPON RULES (real text, 2 balanced columns, continues on page 2); double-sided; cards-only layouts when off; A4/Letter
+- [x] M7 Import: round trips (PNG, PDF all layouts, JSON) incl. options.weaponRulesOnPdf
+- [x] M8 Polish: phone width (true 390 px viewport, no horizontal scroll), Load example, disclaimer
+- [x] M9 Release: README (usage, dev, deploy + Pages "GitHub Actions", settings, judgement calls, disclaimer)
+
+Open / not done:
+- Not pushed, merged or deployed (waiting for the go-ahead). Pages source must be set to "GitHub Actions" once.
+- Physical print size not measured against a real card (needs a printer); 120 × 70 mm is from the Core Rules ratio.
