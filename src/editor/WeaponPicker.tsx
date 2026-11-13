@@ -1,5 +1,34 @@
-import { useId, useMemo, useRef, useState } from "react";
-import { searchWeapons, WEAPON_BY_ID, type WeaponDef } from "../data/weapons";
+import { useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { searchWeapons, WEAPON_BY_ID, type WeaponDef, type WeaponProfile } from "../data/weapons";
+
+/** Atk / Hit / Dmg / WR cells for one profile, laid out on the shared column grid. */
+function statCells(p: WeaponProfile) {
+  return (
+    <>
+      <span className="num">{p.atk}</span>
+      <span className="num">{p.hit}+</span>
+      <span className="num">{p.dmg[0]}/{p.dmg[1]}</span>
+      <span className="wr">{p.rules.length ? p.rules.join(", ") : "–"}</span>
+    </>
+  );
+}
+
+/** Weapon stats as in the Dossier's weapon table, so options can be compared while choosing. */
+function WeaponStats({ w }: { w: WeaponDef }) {
+  if (w.profiles.length === 0) return <span className="mod">{w.modifierText}</span>;
+  if (w.profiles.length === 1) return statCells(w.profiles[0]);
+  return (
+    <>
+      <span className="profiles-gap" />
+      {w.profiles.map((p, i) => (
+        <span key={i} className="profile">
+          <span className="pname">– {p.suffix ?? `profile ${i + 1}`}</span>
+          {statCells(p)}
+        </span>
+      ))}
+    </>
+  );
+}
 
 function matchNote(w: WeaponDef, q: string): string | undefined {
   const query = q.trim().toLowerCase();
@@ -25,6 +54,33 @@ export function WeaponPicker(props: {
   const [active, setActive] = useState(0);
   const listId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [pos, setPos] = useState<CSSProperties>();
+
+  // The list is position:fixed so it isn't clipped by the scrolling editor panel; keep it under (or above) the input.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const r = inputRef.current?.getBoundingClientRect();
+      if (!r) return;
+      const vw = document.documentElement.clientWidth;
+      const vh = window.innerHeight;
+      const width = Math.max(r.width, Math.min(680, vw - 16));
+      const left = Math.max(8, Math.min(r.left, vw - 8 - width));
+      const below = vh - r.bottom - 10;
+      const above = r.top - 10;
+      const up = below < 240 && above > below;
+      const maxHeight = Math.min(420, up ? above : below);
+      setPos(up ? { left, width, maxHeight, bottom: vh - r.top + 2 } : { left, width, maxHeight, top: r.bottom + 2 });
+    };
+    place();
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, true);
+    return () => {
+      window.removeEventListener("resize", place);
+      window.removeEventListener("scroll", place, true);
+    };
+  }, [open]);
 
   const q = query ?? "";
   const results = useMemo(() => searchWeapons(q), [q]);
@@ -61,9 +117,12 @@ export function WeaponPicker(props: {
                 }}
                 onMouseEnter={() => setActive(i)}
               >
-                <span>{w.name}</span>
-                {alt && <small> ({alt})</small>}
+                <span className="wname">
+                  {w.name}
+                  {alt && <small> ({alt})</small>}
+                </span>
                 <span className="cost">{w.selection}</span>
+                <WeaponStats w={w} />
               </li>
             );
           })}
@@ -118,8 +177,18 @@ export function WeaponPicker(props: {
         }}
       />
       {open && (
-        <ul id={listId} role="listbox" aria-label={props.label} className="combo-list">
+        <ul id={listId} role="listbox" aria-label={props.label} className="combo-list" style={pos}>
           {ordered.length === 0 && <li className="none">No match. Pick the closest weapon.</li>}
+          {ordered.length > 0 && (
+            <li role="presentation" aria-hidden className="combo-head">
+              <span>Weapon</span>
+              <span className="sel">Sel.</span>
+              <span className="num">Atk</span>
+              <span className="num">Hit</span>
+              <span className="num">Dmg</span>
+              <span className="wr">Weapon rules</span>
+            </li>
+          )}
           {renderGroup("Ranged", ranged, 0)}
           {renderGroup("Melee", melee, ranged.length)}
         </ul>

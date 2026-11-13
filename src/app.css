@@ -160,16 +160,42 @@ table.mini td { padding: 2px 6px; text-align: center; border-left: 1px solid var
 .wpn .sub.err { color: var(--err); }
 .combo { position: relative; min-width: 0; }
 .combo-list {
-  position: absolute; z-index: 40; left: 0; top: calc(100% + 2px); width: max(100%, 300px); max-height: 320px; overflow: auto;
-  margin: 0; padding: 4px 0; list-style: none; background: #242428; border: 1px solid var(--line); border-radius: 6px;
+  position: fixed; z-index: 60; max-height: 360px; overflow: auto; overscroll-behavior: contain;
+  margin: 0; padding: 0 0 4px; list-style: none; background: #242428; border: 1px solid var(--line); border-radius: 6px;
   box-shadow: 0 10px 24px rgba(0,0,0,.5);
+  /* shared columns: name | sel | atk | hit | dmg | weapon rules — header and every option align on these */
+  --wcols: minmax(110px, 1.1fr) 30px 30px 30px 40px minmax(120px, 1.9fr);
 }
 .combo-list ul { list-style: none; margin: 0; padding: 0; }
 .combo-list .grp-title { font: 500 11px Oswald, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); padding: 6px 10px 2px; }
-.combo-list [role=option] { padding: 5px 10px; display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; }
+.combo-list .combo-head, .combo-list [role=option], .combo-list .profile {
+  display: grid; grid-template-columns: var(--wcols); column-gap: 8px; align-items: baseline;
+}
+.combo-list .combo-head {
+  position: sticky; top: 0; z-index: 1; padding: 6px 10px 4px; background: #242428; border-bottom: 1px solid var(--line);
+  font: 500 11px Oswald, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+}
+.combo-list [role=option] { padding: 5px 10px; cursor: pointer; font-size: 14px; border-top: 1px solid rgba(255,255,255,.04); }
 .combo-list [role=option] small { color: var(--muted); }
-.combo-list [role=option] .cost { margin-left: auto; }
+.combo-list .wname { min-width: 0; }
+.combo-list .cost, .combo-list .sel { grid-column: 2; grid-row: 1; justify-self: center; }
+.combo-list .num { text-align: center; font-variant-numeric: tabular-nums; font-size: 13px; }
+.combo-list .wr { font-size: 12.5px; color: var(--muted); line-height: 1.3; }
+.combo-list [role=option] .mod { grid-column: 3 / -1; font-size: 12.5px; color: var(--muted); line-height: 1.3; }
+.combo-list .profiles-gap { grid-column: 3 / -1; }
+.combo-list .profile { grid-column: 1 / -1; }
+.combo-list .profile .pname { font-size: 12.5px; color: var(--muted); padding-left: 10px; }
+.combo-list .profile .pname + .num { grid-column: 3; }
 .combo-list [role=option].active { background: #3a2a20; }
+@media (max-width: 560px) {
+  /* phones: weapon rules drop to their own line under the stats */
+  .combo-list { --wcols: minmax(0, 1fr) 30px 26px 28px 36px; }
+  .combo-list .combo-head .wr { display: none; }
+  .combo-list .wr, .combo-list [role=option] .mod { grid-column: 1 / -1; padding: 1px 0 2px; }
+  .combo-list .profiles-gap { display: none; }
+  .combo-list .profile .wr { padding-left: 10px; }
+}
+.combo-list [role=option].active .wr, .combo-list [role=option].active .mod { color: var(--text); }
 .combo-list .none { padding: 6px 10px; color: var(--muted); font-size: 13px; }
 .addrow .combo input { border-style: dashed; }
 
