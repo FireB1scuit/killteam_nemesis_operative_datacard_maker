@@ -148,6 +148,11 @@ export function StepSize({ build, dispatch, issues }: StepProps) {
             }} />
         </label>
       </div>
+      <div className="note">
+        Rough guide: <b>Small</b> is about 40–60mm (e.g. 50mm), <b>Medium</b> about 60–80mm (e.g. 80mm) and{" "}
+        <b>Large</b> 90mm or bigger. These aren't strict rules: pick the size that feels right for how big and
+        dangerous the model is, and use its real base.
+      </div>
       <details className="note">
         <summary>Kill team operatives allowed alongside a {SIZES[build.size].label.toLowerCase()} nemesis</summary>
         <table className="mini">
