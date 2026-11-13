@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import type { BuildImage } from "../model/schema";
-import { processImageFile } from "../io/image";
+import { looksLikeImage, processImageFile } from "../io/image";
 import { CameraDialog, canUseLiveCamera, prefersNativeCamera } from "./CameraDialog";
+
+const ACCEPT_EXT = ".jpg,.jpeg,.jfif,.png,.webp,.gif,.avif,.bmp,.svg,.ico,.heic,.heif,.tif,.tiff";
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -92,7 +94,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
     <div
       className={`drop${over ? " over" : ""}`}
       onDragOver={(e) => {
-        if ([...e.dataTransfer.items].some((i) => i.kind === "file" && i.type.startsWith("image/"))) {
+        if ([...e.dataTransfer.items].some((i) => i.kind === "file" && (!i.type || looksLikeImage(i)))) {
           e.preventDefault();
           e.stopPropagation();
           setOver(true);
@@ -100,7 +102,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
       }}
       onDragLeave={() => setOver(false)}
       onDrop={(e) => {
-        const f = [...e.dataTransfer.files].find((x) => x.type.startsWith("image/"));
+        const f = [...e.dataTransfer.files].find(looksLikeImage);
         if (!f) return;
         e.preventDefault();
         e.stopPropagation();
@@ -108,7 +110,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
         void accept(f);
       }}
       onPaste={(e) => {
-        const f = [...e.clipboardData.files].find((x) => x.type.startsWith("image/"));
+        const f = [...e.clipboardData.files].find(looksLikeImage);
         if (f) void accept(f);
       }}
     >
@@ -134,7 +136,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
       </div>
       <div className="drop-side">
         <b>Model picture</b>
-        {!image && <span>Drop an image here, paste, click to upload (JPG/PNG/WebP){hasCamera ? " or take a photo" : ""}. It's resized to 1600 px.</span>}
+        {!image && <span>Drop an image here, paste, click to upload (JPG, PNG, WebP, HEIC, GIF, BMP, SVG…){hasCamera ? " or take a photo" : ""}. It's resized to 1600 px.</span>}
         {image && (
           <>
             <span>Drag to position · scroll or slider to zoom.</span>
@@ -160,7 +162,7 @@ export function ImageCropper({ image, onChange }: { image?: BuildImage; onChange
           )}
         </div>
         {error && <span className="err" role="alert">{error}</span>}
-        <input ref={fileRef} type="file" accept="image/*" hidden
+        <input ref={fileRef} type="file" accept={`image/*,${ACCEPT_EXT}`} hidden
           onChange={(e) => {
             void accept(e.target.files?.[0]);
             e.target.value = "";
