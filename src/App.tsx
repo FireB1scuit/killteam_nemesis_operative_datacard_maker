@@ -26,7 +26,7 @@ const SHEETS: { id: PdfLayout; label: string }[] = [
   { id: "sheet-letter", label: "Letter sheet with cut marks" },
 ];
 /** Export PDF menu, with the configured default layout (CONFIG.defaultPdfLayout) first. */
-const PDF_LAYOUTS = CONFIG.defaultPdfLayout === "cards" ? [CARD_PAGES, ...SHEETS] : [...SHEETS, CARD_PAGES];
+const PDF_LAYOUTS = CONFIG.defaultPaper === "a4" ? [CARD_PAGES, ...SHEETS] : [...SHEETS, CARD_PAGES];
 
 type Toast = { kind: "ok" | "error"; text: string } | null;
 

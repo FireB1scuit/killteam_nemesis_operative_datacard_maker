@@ -1,4 +1,5 @@
 import { forwardRef, type CSSProperties, type ReactNode } from "react";
+import { parseBold } from "../data/behaviours";
 import type { RuleAbility } from "../model/derive";
 import { AbilityView, CardFooter, CardHeader } from "./CardParts";
 import { cardClass, type CardProps } from "./Datacard";
@@ -29,11 +30,9 @@ export const RulesCard = forwardRef<HTMLDivElement, CardProps & { overflowBlocks
           </div>
           {hasPrio ? (
             <ol className="prio">
-              {a.priorities!.map((s, i) => {
-                // Bold the action name and its full stop ("Fight." / "Reposition. If possible…").
-                const dot = s.rest.startsWith(".");
-                return <li key={i}><b>{s.action}{dot ? "." : ""}</b>{dot ? s.rest.slice(1) : s.rest}</li>;
-              })}
+              {a.priorities!.map((step, i) => (
+                <li key={i}>{parseBold(step).map((seg, k) => (seg.bold ? <b key={k}>{seg.text}</b> : seg.text))}</li>
+              ))}
             </ol>
           ) : (
             <div>{a.restrictions.map((r, i) => <p key={i} className="res">{r}</p>)}</div>

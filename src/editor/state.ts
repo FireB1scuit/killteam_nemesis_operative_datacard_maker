@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import { DEFAULT_BASE } from "../data/bases";
-import type { SizeId } from "../data/sizes";
+import { SIZES, type SizeId } from "../data/sizes";
 import type { TraitId } from "../data/traits";
 import { WEAPON_BY_ID } from "../data/weapons";
 import { migrateBuild } from "../model/migrate";
@@ -28,8 +27,8 @@ export function reducer(b: NemesisBuild, a: Action): NemesisBuild {
       return { ...b, name: a.name, nameKeyword: synced ? keywordFromName(a.name) : b.nameKeyword };
     }
     case "setSize": {
-      const baseUntouched = b.base.label === DEFAULT_BASE[b.size];
-      return { ...b, size: a.size, base: baseUntouched ? { kind: "round", label: DEFAULT_BASE[a.size] } : b.base };
+      const baseUntouched = b.base.label === SIZES[b.size].defaultBase;
+      return { ...b, size: a.size, base: baseUntouched ? { kind: "round", label: SIZES[a.size].defaultBase } : b.base };
     }
     case "addWeapon": {
       const def = WEAPON_BY_ID[a.weaponId];

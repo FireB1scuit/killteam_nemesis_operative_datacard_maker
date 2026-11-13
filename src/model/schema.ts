@@ -24,6 +24,11 @@ export const ImageSchema = z.object({
   zoom: z.number().min(1).max(5),
 });
 
+export const OptionsSchema = z.object({
+  /** Print the weapon rules reference below the cards on the PDF. Default true. */
+  weaponRulesOnPdf: z.boolean(),
+});
+
 export const NemesisBuildSchema = z.object({
   schema: z.literal(SCHEMA_MAGIC),
   version: z.literal(SCHEMA_VERSION),
@@ -39,6 +44,8 @@ export const NemesisBuildSchema = z.object({
   behaviour: z.enum(BEHAVIOUR_IDS).optional(),
   weapons: z.array(WeaponPickSchema),
   traits: z.array(z.enum(TRAIT_IDS)),
+  /** Export options saved with the build (plan.md §4.1). Missing → defaults (weapon rules on). */
+  options: OptionsSchema.optional(),
   image: ImageSchema.optional(),
   createdWith: z.string(),
 });
@@ -46,6 +53,12 @@ export const NemesisBuildSchema = z.object({
 export type WeaponPick = z.infer<typeof WeaponPickSchema>;
 export type BuildImage = z.infer<typeof ImageSchema>;
 export type NemesisBuild = z.infer<typeof NemesisBuildSchema>;
+export type BuildOptions = z.infer<typeof OptionsSchema>;
+
+/** options.weaponRulesOnPdf with its default (true). */
+export function weaponRulesOnPdf(build: NemesisBuild): boolean {
+  return build.options?.weaponRulesOnPdf ?? true;
+}
 
 let counter = 0;
 export function newPickId(): string {
@@ -64,6 +77,7 @@ export function emptyBuild(): NemesisBuild {
     base: { kind: "round", label: "80" },
     weapons: [],
     traits: [],
+    options: { weaponRulesOnPdf: true },
     createdWith: typeof __APP_VERSION__ === "string" ? __APP_VERSION__ : "dev",
   };
 }

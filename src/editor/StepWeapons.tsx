@@ -1,20 +1,32 @@
+import type { ReactNode } from "react";
+import { ruleTooltip } from "../data/weaponRules";
 import { WEAPON_BY_ID, type WeaponDef } from "../data/weapons";
 import type { Issue } from "../model/validate";
 import { Step } from "./Step";
 import type { StepProps } from "./Steps";
 import { WeaponPicker } from "./WeaponPicker";
 
-function describe(def: WeaponDef): string {
+function describe(def: WeaponDef): ReactNode {
   if (def.modifier) return `Modifier: ${def.modifierText}`;
   const kind = def.type === "ranged" ? "Ranged" : "Melee";
   const alt = def.alternatives.length ? ` · alt: ${def.alternatives.join(", ")}` : "";
+  const rules = (list: string[]) =>
+    list.map((r, i) => (
+      <span key={r}>{i > 0 && ", "}<abbr title={ruleTooltip(r)}>{r}</abbr></span>
+    ));
   if (def.profiles.length > 1) {
-    const names = def.profiles.map((p) => p.suffix).join(" / ");
-    return `${kind} · two profiles (${names})${alt}`;
+    return (
+      <>
+        {kind}
+        {def.profiles.map((p) => (
+          <span key={p.suffix}> · {p.suffix}: {p.atk} / {p.hit}+ / {p.dmg.join("/")}{p.rules.length > 0 && <> · {rules(p.rules)}</>}</span>
+        ))}
+        {alt}
+      </>
+    );
   }
   const p = def.profiles[0];
-  const rules = p.rules.length ? ` · ${p.rules.join(", ")}` : "";
-  return `${kind} · ${p.atk} / ${p.hit}+ / ${p.dmg.join("/")}${rules}${alt}`;
+  return <>{kind} · {p.atk} / {p.hit}+ / {p.dmg.join("/")}{p.rules.length > 0 && <> · {rules(p.rules)}</>}{alt}</>;
 }
 
 export function StepWeapons({ build, dispatch, issues, card }: StepProps) {
@@ -57,7 +69,7 @@ export function StepWeapons({ build, dispatch, issues, card }: StepProps) {
               >
                 <option value="">→ choose {def.type} weapon</option>
                 {targets.map((t) => (
-                  <option key={t.id} value={t.id}>→ {t.alias || WEAPON_BY_ID[t.weaponId].name}</option>
+                  <option key={t.id} value={t.id}>→ {t.alias || WEAPON_BY_ID[t.weaponId]?.name}</option>
                 ))}
               </select>
             ) : (
@@ -83,9 +95,10 @@ export function StepWeapons({ build, dispatch, issues, card }: StepProps) {
               {describe(def)}
               {def.modifier && pick.targetId && (() => {
                 const t = build.weapons.find((w) => w.id === pick.targetId);
-                const name = t ? t.alias || WEAPON_BY_ID[t.weaponId]?.name : undefined;
-                const prefix = def.modifier === "twinned" ? "Twinned" : "Paired";
-                return name ? ` Shown as “${prefix} ${name.charAt(0).toLowerCase()}${name.slice(1)}”.` : null;
+                const tdef = t && WEAPON_BY_ID[t.weaponId];
+                if (!t || !tdef) return null;
+                const shown = t.alias?.trim() || `${def.modifier!.labelPrefix} ${tdef.name.toLowerCase()}`;
+                return ` Shown as “${shown}”${t.alias ? " (its alias)" : ""}.`;
               })()}
             </div>
             {rowIssues.map((i, k) => <div key={k} className="sub err" role="alert">{i.message}</div>)}

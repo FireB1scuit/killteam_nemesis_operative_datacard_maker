@@ -1,5 +1,5 @@
 /**
- * App-wide defaults for the open questions in plan.md §8. Change them here; see README "Configuration".
+ * App-wide defaults for the decisions in plan.md §8. Change them here; see README "Settings and defaults".
  */
 export const CONFIG = {
   /** §8.1 Physical card size. The card DOM is laid out at 10 CSS px per mm. */
@@ -8,12 +8,6 @@ export const CONFIG = {
 
   /** §8.3 Card accent colour (KT 2024 orange). Applied as the --faction CSS variable. */
   accent: "#e8641c",
-
-  /**
-   * §8.4 Allegiance trait wording. Only "friendly" (the Dossier's builder wording) ships with v1;
-   * NPO-side wording would need a second text per allegiance in src/data/allegiances.ts.
-   */
-  allegianceWording: "friendly" as const,
 
   /** §8.5 Fury + Waaagh! both worsen ranged Hit: stack them (-2) or cap at -1. */
   stackHitPenalties: true,
@@ -24,8 +18,11 @@ export const CONFIG = {
   highlightInPreview: true,
   highlightInExport: false,
 
-  /** §8.7 Default PDF layout: "cards" = one card per 120×70 mm page; "sheet" = A4/Letter sheet with cut marks. */
-  defaultPdfLayout: "cards" as "cards" | "sheet",
+  /** §8.8 Weapon rules reference below the cards on the PDF: default for new builds (the user's choice is remembered). */
+  weaponRulesOnPdf: true,
+
+  /** Paper size for the PDF pages with weapon rules / print sheets. The user can switch it in the Export PDF menu. */
+  defaultPaper: "a4" as "a4" | "letter",
 
   /** PNG export pixel ratio (1200×700 → 3600×2100). */
   pngPixelRatio: 3,

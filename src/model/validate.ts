@@ -1,8 +1,8 @@
 import { CONFIG } from "../config";
-import { baseLongEdge } from "../data/bases";
+import { baseLongEdge, BIG_BASE_WARNING } from "../data/bases";
 import { TRAIT_BY_ID } from "../data/traits";
 import { WEAPON_BY_ID } from "../data/weapons";
-import { selectionBudget } from "./derive";
+import { hasStackedHitPenalty, selectionBudget } from "./derive";
 import type { NemesisBuild } from "./schema";
 
 export type StepId = "operative" | "allegiance" | "size" | "behaviour" | "weapons" | "traits";
@@ -23,7 +23,7 @@ export function validate(build: NemesisBuild): Issue[] {
   // Size & base
   if (!build.base.label.trim()) add("size", "warning", "No base size set.");
   else if (baseLongEdge(build.base.label) >= 100)
-    add("size", "warning", "Bases of 100mm or more can be awkward in close-quarters killzones (e.g. Tomb World).");
+    add("size", "warning", BIG_BASE_WARNING);
 
   // Behaviour
   if (build.operativeType === "npo" && !build.behaviour) add("behaviour", "error", "An NPO needs a behaviour.");
@@ -31,7 +31,7 @@ export function validate(build: NemesisBuild): Issue[] {
   // Weapons
   const { used, allowed, traitSlots } = selectionBudget(build);
   if (used > allowed) add("weapons", "error", `Too many weapon selections: ${used} used, ${allowed} allowed.`);
-  const real = build.weapons.filter((p) => WEAPON_BY_ID[p.weaponId] && !WEAPON_BY_ID[p.weaponId].modifier);
+  const real = build.weapons.filter((p) => { const d = WEAPON_BY_ID[p.weaponId]; return d && !d.modifier; });
   if (real.length === 0) add("weapons", "warning", "Add at least one weapon.");
 
   const byId = new Map(build.weapons.map((p) => [p.id, p]));
@@ -67,6 +67,9 @@ export function validate(build: NemesisBuild): Issue[] {
   if (unique.size > traitSlots) add("traits", "error", `Too many nemesis traits: ${unique.size} chosen, ${traitSlots} allowed.`);
   else if (unique.size < traitSlots)
     add("traits", "warning", `Choose ${traitSlots - unique.size} more nemesis trait${traitSlots - unique.size > 1 ? "s" : ""} (${traitSlots} allowed).`);
+
+  if (hasStackedHitPenalty(build) && CONFIG.stackHitPenalties)
+    add("traits", "warning", "Fury and Waaagh! both worsen ranged Hit: the penalties stack (−2).");
 
   return issues;
 }

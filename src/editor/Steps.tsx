@@ -1,7 +1,7 @@
 import type { Dispatch } from "react";
 import { ALLEGIANCES, ALLEGIANCE_BY_ID } from "../data/allegiances";
 import { BASE_PRESETS, normaliseBaseLabel } from "../data/bases";
-import { BEHAVIOURS } from "../data/behaviours";
+import { BEHAVIOURS, parseBold } from "../data/behaviours";
 import { OPERATIVES_ALONGSIDE, SIZES, SIZE_IDS, TEAM_SIZE_COLUMNS } from "../data/sizes";
 import { TRAITS } from "../data/traits";
 import type { NemesisBuild } from "../model/schema";
@@ -184,7 +184,7 @@ export function StepBehaviour({ build, dispatch, issues }: StepProps) {
           </button>
         ))}
       </div>
-      {sel && <div className="note">{sel.text.split(". When activated")[0]}. Priorities: {sel.priorities.map((p) => p.action).join(" › ")}.</div>}
+      {sel && <div className="note">{sel.text.split(". When activated")[0]}. Priorities: {sel.priorities.map((p) => parseBold(p).find((x) => x.bold)?.text.replace(/\.$/, "") ?? "").join(" › ")}.</div>}
     </Step>
   );
 }
@@ -194,7 +194,7 @@ export function StepTraits({ build, dispatch, issues, card }: StepProps) {
   const full = build.traits.length >= slots;
   const a = build.allegiance ? ALLEGIANCE_BY_ID[build.allegiance] : undefined;
   const effects: string[] = [];
-  const fury = build.traits.includes("fury");
+  const fury = build.traits.includes("FURY");
   if (fury) effects.push("Fury applied: melee Ceaseless (or Ceaseless → Relentless), ranged Hit worsened by 1.");
   if (build.allegiance === "ORK") effects.push("Waaagh! applied: ranged Hit worsened by 1, melee weapons gain Severe.");
   return (

@@ -96,7 +96,7 @@ describe("PDF", () => {
   });
 
   it("falls back to the Info key when the attachment is missing", async () => {
-    const b = exampleBuild("redemptor");
+    const b = exampleBuild("redemptor-dreadnought");
     const pdf = await buildPdf([tinyPng()], buildToJson(b), "cards", "Test");
     // Strip the EmbeddedFiles name tree and re-save.
     const doc = await PDFDocument.load(pdf);
@@ -115,7 +115,7 @@ describe("PDF", () => {
 
 describe("JSON", () => {
   it("round-trips and reports bad files", async () => {
-    const b = exampleBuild("xv8-crisis");
+    const b = exampleBuild("xv8-crisis-battlesuit");
     const back = await importBytes("save.json", new TextEncoder().encode(JSON.stringify(b)));
     expect(back).toEqual(b);
     await expect(importBytes("save.json", new TextEncoder().encode("{not json"))).rejects.toThrow(/valid JSON/);

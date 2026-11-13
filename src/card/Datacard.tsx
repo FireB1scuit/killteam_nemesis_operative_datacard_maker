@@ -2,6 +2,7 @@ import { forwardRef, type CSSProperties } from "react";
 import type { CardModel, RuleAbility } from "../model/derive";
 import type { BuildImage } from "../model/schema";
 import { AbilityView, CardFooter, CardHeader } from "./CardParts";
+import { ruleTooltip } from "../data/weaponRules";
 import { IconMelee, IconRanged } from "./icons";
 
 export type CardProps = {
@@ -43,10 +44,10 @@ export const Datacard = forwardRef<HTMLDivElement, CardProps & { traitBlocks: Ru
                 <td className="c"><span className={w.changed.hit ? "mod" : undefined}>{w.hit}+</span></td>
                 <td className="c">{w.dmg}</td>
                 <td className="wr">
-                  {w.rules.length === 0 ? "–" : w.rules.map((r, i) => (
+                  {w.rules.length === 0 ? "-" : w.rules.map((r, i) => (
                     <span key={r.text}>
                       {i > 0 && ", "}
-                      <span className={r.changed ? "mod" : undefined}>{r.text}</span>
+                      <span className={r.changed ? "mod" : undefined} title={ruleTooltip(r.text)}>{r.text}</span>
                     </span>
                   ))}
                 </td>

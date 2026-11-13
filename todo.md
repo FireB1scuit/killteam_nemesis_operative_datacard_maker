@@ -28,3 +28,17 @@ How to work:
 - Keep todo.md current as a checklist.
 
 Finish with: all tests, lint and build passing; work committed on feat/datacard-maker; README (usage, local dev, deploy steps incl. setting Pages to "GitHub Actions", settings/defaults, judgement calls, disclaimer); and a short final report of what was built, how it was verified (screenshot paths), and anything left open. Ask me before pushing, merging or opening a PR.
+
+---
+
+## Checklist (kept current while working)
+
+- [x] M1 Scaffold: Vite/React/TS, lint, vitest, Pages workflow (done earlier)
+- [x] M2 Rules data + engine: src/data/*.ts read docs/rules-data.json (single source); allegiance prints `cardText`; deriveCard data-driven (Twinned/Paired `apply`, Fury/Waaagh! `applyToProfiles`); golden tests loop over `examples[].expected`; edge cases; legacy-id migration
+- [x] weaponRuleReference(card) + tests against `expected.weaponRuleReference`
+- [ ] M3 Cards: check against docs/mockups/datacard.png; worst cases (Large NPO 4 traits; 3 two-profile weapons)
+- [ ] M4/M5 Editor + picture: verify against app.png; "Weapon rules on PDF" toggle (role=switch, On/Off, tooltip, remembered default) + preview line
+- [ ] M6 Export: PDF page with cards + cut line + WEAPON RULES (pdf-lib + fontkit, real text, 2 columns, continues on page 2); double-sided; cards-only layouts when off; A4/Letter
+- [ ] M7 Import: round trips incl. options.weaponRulesOnPdf
+- [ ] M8 Polish: mobile layout, keyboard, empty states, Load example
+- [ ] M9 Release: README (usage, dev, deploy + Pages "GitHub Actions", settings, judgement calls, disclaimer); screenshots

@@ -65,13 +65,15 @@ export function CardFooter({ model, page }: { model: CardModel; page: string }) 
 
 export function AbilityView({ block }: { block: AbilityBlock }) {
   if (block.kind === "action") return null; // rendered by RulesCard
+  const paras = block.text ? block.text.split(/\n\s*\n/) : [];
   return (
     <div className="ab" data-key={block.key}>
       <p>
         <b>{block.name}:</b>
-        {block.text && <> {block.text}</>}
-        {block.note && <> <i>{block.note}</i></>}
+        {paras[0] && <> {paras[0]}</>}
+        {block.note && <> <i>{block.note}</i>.</>}
       </p>
+      {paras.slice(1).map((t, i) => <p key={i}>{t}</p>)}
       {block.bullets && (
         <ul>
           {block.bullets.map((b, i) => <li key={i}>{b}</li>)}
